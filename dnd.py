@@ -28,7 +28,8 @@ class Dnd(commands.Cog):
         await thread.send(f"{ctx.author.mention} is creating a new character")
 
         if not await self.new_character(thread, characters, ctx.author.id, ctx.author):
-            await thread.send("Character creation failed")
+            await ctx.send("Character creation failed")
+            await thread.delete()
             return
 
         with open(CHARACTER_FOLDER + 'characters.json', 'w') as f:
@@ -36,6 +37,7 @@ class Dnd(commands.Cog):
 
         await thread.delete()
         await ctx.send("You are now registered")
+
 
     @commands.command()
     async def unregister(self, ctx):
@@ -53,6 +55,7 @@ class Dnd(commands.Cog):
 
         await ctx.send("You are now unregistered")
 
+
     @commands.command()
     async def character(self, ctx):
         if not self.is_registered(ctx.author.id):
@@ -65,6 +68,7 @@ class Dnd(commands.Cog):
         #send character sheet in an embed
         embed = discord.Embed(title="Character sheet", description="Here is your character sheet", color=0x00ff00)
         embed.add_field(name="Name", value=characters[str(ctx.author.id)]["name"], inline=False)
+        embed.add_field(name="Race", value=characters[str(ctx.author.id)]["race"], inline=False)
         embed.add_field(name="Class", value=characters[str(ctx.author.id)]["class"], inline=False)
         embed.add_field(name="Gender", value=characters[str(ctx.author.id)]["gender"], inline=False)
         embed.add_field(name="Age", value=characters[str(ctx.author.id)]["age"], inline=False)
@@ -83,8 +87,15 @@ class Dnd(commands.Cog):
         if not res : return False
         characters[user_id]["gender"] = res
 
+        #character race
+        races = util.load_races()
+        res = await util.choose(self.bot, thread, races, "race", author)
+        if not res: return False
+        characters[user_id]["race"] = res
+
         #character class
-        res = await util.choose(self.bot, thread, ["Warrior", "Mage", "Rogue"], author)
+        classes = util.load_classes()
+        res = await util.choose(self.bot, thread, classes, "class", author)
         if not res : return False
         characters[user_id]["class"] = res
 

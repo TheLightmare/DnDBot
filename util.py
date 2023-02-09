@@ -1,5 +1,6 @@
 import asyncio
 import discord
+import json
 from settings import *
 
 
@@ -9,7 +10,7 @@ async def question(bot, thread, question, type, author):
     while not answered:
         await thread.send(question)
         try :
-            message = await bot.wait_for('message', check=lambda message: message.author == author, timeout=10)
+            message = await bot.wait_for('message', check=lambda message: message.author == author, timeout=30)
         except asyncio.TimeoutError:
             await thread.send("You didn't answer in time")
             return False
@@ -29,13 +30,13 @@ async def question(bot, thread, question, type, author):
 
 
 # function to choose in a list of options using reactions
-async def choose(bot, thread, options, author):
+async def choose(bot, thread, options, option_type, author):
     # create a list of emojis
     emojis = []
     for i in range(1, len(options) + 1):
         emojis.append(str(i) + "️⃣")
 
-    text = "Choose one of the options below"
+    text = f"Choose one of the {option_type} below"
     i = 0
     for option in options:
         text += f"\n{emojis[i]} {option}"
@@ -48,7 +49,7 @@ async def choose(bot, thread, options, author):
 
     # wait for the user to react and check if it is a valid reaction
     try :
-        reaction, user = await bot.wait_for('reaction_add', check=lambda reaction, user: user == author and reaction.emoji in emojis, timeout=10)
+        reaction, user = await bot.wait_for('reaction_add', check=lambda reaction, user: user == author and reaction.emoji in emojis, timeout=30)
     except asyncio.TimeoutError:
         await thread.send("You didn't answer in time")
         return False
@@ -57,3 +58,18 @@ async def choose(bot, thread, options, author):
 
     # return the option that the user chose
     return options[emojis.index(reaction.emoji)]
+
+
+
+# function to load classes.json in a python list
+def load_classes():
+    with open(CONTENT_FOLDER + 'classes/classes.json', 'r') as f:
+        classes = json.load(f)
+    return classes["Classes"]
+
+
+# function to load races.json in a python list
+def load_races():
+    with open(CONTENT_FOLDER + "races/races.json", 'r') as f:
+        races = json.load(f)
+    return races["Races"]

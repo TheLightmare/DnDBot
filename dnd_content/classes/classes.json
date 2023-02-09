@@ -1,0 +1,12 @@
+{ "Classes" :
+  [
+    "Paladin",
+    "Monk",
+    "Warlock",
+    "Druid",
+    "Rogue",
+    "Cleric",
+    "Bard",
+    "Ranger"
+  ]
+}

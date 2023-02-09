@@ -1,0 +1,7 @@
+{
+  "Name": "Warlock",
+  "Description": "A Warlock is a powerful spellcaster. Their magic comes from a bargain with an extraplanar entity, and they are bound to serve that entity in exchange for power. Warlocks are often called upon to perform dark rituals and to summon creatures from other planes of existence."
+  "Hit Die": "d8",
+    "Primary Ability": "Charisma",
+    "Saving Throws": "Wisdom, Charisma"
+}
