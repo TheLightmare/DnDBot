@@ -1,6 +1,6 @@
 import json
 import discord
-import character
+import dnd_ui
 import util
 from settings import *
 from discord.ext import commands
@@ -104,7 +104,12 @@ class Dnd(commands.Cog):
         if not res : return False
         characters[user_id]["age"] = res
 
+
         return characters
+
+    @commands.command()
+    async def test_stats(self, ctx):
+        stats = await util.stat_distribution(self.bot, ctx.channel, ctx.author.id)
 
 
     #command to see if a character is registered

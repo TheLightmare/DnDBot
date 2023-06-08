@@ -1,5 +1,8 @@
 import asyncio
 import discord
+from discord.ui import Button, View, Select
+from discord.components import SelectOption
+import dnd_ui
 import json
 from settings import *
 
@@ -59,6 +62,10 @@ async def choose(bot, thread, options, option_type, author):
     # return the option that the user chose
     return options[emojis.index(reaction.emoji)]
 
+
+# distribute character stats using an embed and buttons
+async def stat_distribution(bot, thread, author):
+    await thread.send("Distribute your stats", view = dnd_ui.StatDistributionUI())
 
 
 # function to load classes.json in a python list
