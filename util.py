@@ -4,6 +4,7 @@ from discord.ui import Button, View, Select
 from discord.components import SelectOption
 import dnd_ui
 import json
+from character import Character
 from settings import *
 
 
@@ -64,8 +65,36 @@ async def choose(bot, thread, options, option_type, author):
 
 
 # distribute character stats using an embed and buttons
-async def stat_distribution(bot, thread, author):
-    await thread.send("Distribute your stats", view = dnd_ui.StatDistributionUI())
+async def create_character(bot, thread, author):
+    # create a character object
+    character = Character(author)
+
+    # create character info embed
+    embed = discord.Embed(title="Character info", description="Enter your character info", color=0x00ff00)
+    embed.add_field(name="Name", value="*Enter a character name*", inline=False)
+    embed.add_field(name="Age", value="*Enter character age*", inline=False)
+    embed.add_field(name="Race", value="*Choose race*", inline=False)
+    embed.add_field(name="Class", value="*Choose class*", inline=False)
+
+    await thread.send(embed = embed, view = dnd_ui.CharacterCreationUI(character))
+
+    #create character equipment/spells embed
+    embed = discord.Embed(title="Equipment and Spêlls", description="use the scroll menus ")
+    #TODO finish the spells and equipment selection menu
+
+    # create stats embed
+    embed = discord.Embed(title="Stat distribution", description="Distribute your stats", color=0x00ff00)
+    embed.add_field(name="POINTS LEFT", value="10", inline=False)
+    embed.add_field(name="===================", value="", inline=False)
+    embed.add_field(name="Strength", value="10", inline=False)
+    embed.add_field(name="Dexterity", value="10", inline=False)
+    embed.add_field(name="Constitution", value="10", inline=False)
+    embed.add_field(name="Intelligence", value="10", inline=False)
+    embed.add_field(name="Wisdom", value="10", inline=False)
+    embed.add_field(name="Charisma", value="10", inline=False)
+
+    await thread.send(embed = embed, view = dnd_ui.StatsDistributionUI(thread, character))
+
 
 
 # function to load classes.json in a python list

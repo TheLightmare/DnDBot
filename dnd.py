@@ -27,16 +27,8 @@ class Dnd(commands.Cog):
         thread = await ctx.channel.create_thread(name="Character creation", reason="Character creation", auto_archive_duration=60)
         await thread.send(f"{ctx.author.mention} is creating a new character")
 
-        if not await self.new_character(thread, characters, ctx.author.id, ctx.author):
-            await ctx.send("Character creation failed")
-            await thread.delete()
-            return
+        await util.create_character(self.bot, thread, ctx.author)
 
-        with open(CHARACTER_FOLDER + 'characters.json', 'w') as f:
-            json.dump(characters, f)
-
-        await thread.delete()
-        await ctx.send("You are now registered")
 
 
     @commands.command()
@@ -74,42 +66,9 @@ class Dnd(commands.Cog):
         embed.add_field(name="Age", value=characters[str(ctx.author.id)]["age"], inline=False)
         await ctx.send(embed=embed)
 
-    async def new_character(self, thread, characters, user_id, author):
-        characters[user_id] = {}
-
-        #character name
-        res = await util.question(self.bot, thread, "What is your character's name?", str, author)
-        if not res : return False
-        characters[user_id]["name"] = res
-
-        #character gender
-        res = await util.question(self.bot, thread, "What is your character's gender?", str, author)
-        if not res : return False
-        characters[user_id]["gender"] = res
-
-        #character race
-        races = util.load_races()
-        res = await util.choose(self.bot, thread, races, "race", author)
-        if not res: return False
-        characters[user_id]["race"] = res
-
-        #character class
-        classes = util.load_classes()
-        res = await util.choose(self.bot, thread, classes, "class", author)
-        if not res : return False
-        characters[user_id]["class"] = res
-
-        #character age
-        res = await util.question(self.bot, thread, "What is your character's age?", int, author)
-        if not res : return False
-        characters[user_id]["age"] = res
-
-
-        return characters
-
     @commands.command()
     async def test_stats(self, ctx):
-        stats = await util.stat_distribution(self.bot, ctx.channel, ctx.author.id)
+        stats = await util.create_character(self.bot, ctx.channel, ctx.author.id)
 
 
     #command to see if a character is registered
