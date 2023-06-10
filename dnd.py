@@ -4,6 +4,9 @@ import dnd_ui
 import util
 from settings import *
 from discord.ext import commands
+from discord.ui import Modal
+from dnd_ui import *
+from character import Character
 
 class Dnd(commands.Cog):
     def __init__(self, bot):
@@ -37,15 +40,14 @@ class Dnd(commands.Cog):
             await ctx.send("You are not registered")
             return
 
-        with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
-            characters = json.load(f)
+        character = Character(ctx.author)
+        character.load()
 
-        del characters[str(ctx.author.id)]
+        # confirm deletion using buttons
+        deleteconfirmUI = dnd_ui.DeleteCharacterUI(ctx.author, character)
 
-        with open(CHARACTER_FOLDER + 'characters.json', 'w') as f:
-            json.dump(characters, f)
+        await ctx.send("Are you sure you want to delete your character?", view=deleteconfirmUI)
 
-        await ctx.send("You are now unregistered")
 
 
     @commands.command()
@@ -75,7 +77,9 @@ class Dnd(commands.Cog):
     def is_registered(self, user_id):
         with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
             characters = json.load(f)
-        return characters.get(str(user_id)) != None
+        character = characters.get(str(user_id))
+        return character
+
 
 async def setup(bot):
     await bot.add_cog(Dnd(bot))

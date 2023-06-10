@@ -28,6 +28,29 @@ class CharacterCreationModal(Modal):
         await interaction.response.defer()
 
 
+
+#view  to confirm character deletion
+class DeleteCharacterUI(View):
+    def __init__(self, author, character) -> None:
+        super().__init__(timeout=None)
+        self.author = author
+        self.character = character
+
+    async def interaction_check(self, interaction: discord.Interaction):
+        return interaction.user.id == self.author.id
+
+    @discord.ui.button(label="No", style=discord.ButtonStyle.danger)
+    async def no(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.message.delete()
+        await interaction.response.send_message("Character deletion cancelled", ephemeral=True)
+
+    @discord.ui.button(label="Yes", style=discord.ButtonStyle.success)
+    async def yes(self, interaction: discord.Interaction, button: discord.ui.Button):
+        self.character.delete()
+        await interaction.message.delete()
+        await interaction.response.send_message("Character deleted", ephemeral=True)
+
+
 # atrocity
 class CharacterCreationUI(View):
     def __init__(self, character) -> None:
@@ -89,12 +112,68 @@ class CharacterCreationUI(View):
         await interaction.response.send_modal(modal)
 
 
-class EquipmentSpellsUI(View):
-    def __init__(self):
+class EquipmentUI(View):
+    def __init__(self, character) -> None:
         super().__init__(timeout=None)
+        self.character = character
+        self.selected_equipment = None
 
-    @discord.ui.select(options=[], placeholder="Choose a piece of equipment")
+    #TODO: make so the equipment list is loaded from the weapons.json file
+    @discord.ui.select(options=[
+        discord.SelectOption(label="Club", value="Club"),
+    ], placeholder="Choose a piece of equipment")
     async def equipmentselect(self, interaction: discord.Interaction, select: discord.ui.Select):
+        self.selected_equipment = select.values[0]
+
+        await interaction.response.defer()
+
+    @discord.ui.button(label="Add Equipment", style=discord.ButtonStyle.blurple)
+    async def addequipment(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if self.selected_equipment is None:
+            await interaction.response.send_message("Please select a piece of equipment", ephemeral=True, delete_after=5)
+            return
+
+        #get embed
+        embed = interaction.message.embeds[0]
+        #modify embed
+        embed.set_field_at(0, name="Equipment", value=self.selected_equipment, inline=False)
+        self.character.inventory.append(self.selected_equipment)
+        #send embed
+        await interaction.message.edit(embed=embed)
+
+        await interaction.response.defer()
+
+
+class SpellsUI(View):
+    def __init__(self, character) -> None:
+        super().__init__(timeout=None)
+        self.character = character
+        self.selected_spell = None
+        self.current_spells = ""
+
+    #TODO: make so spells are loaded from the spells.json file
+    @discord.ui.select(options=[
+        discord.SelectOption(label="Acid Splash", value="Acid Splash", description="[Atk Type]: zone + ranged, [Dmg Type]: acid, [Dmg]: 1d6"),
+    ], placeholder="Choose a spell")
+    async def spellselect(self, interaction: discord.Interaction, select: discord.ui.Select):
+        self.selected_spell = select.values[0]
+        await interaction.response.defer()
+
+    @discord.ui.button(label="Add Spell", style=discord.ButtonStyle.blurple)
+    async def addspell(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if self.selected_spell is None:
+            await interaction.response.send_message("Please select a spell", ephemeral=True, delete_after=5)
+            return
+
+        #get embed
+        embed = interaction.message.embeds[0]
+        #modify embed
+        self.current_spells += "- " + self.selected_spell + "\n"
+        embed.set_field_at(0, name="Spells", value=self.current_spells, inline=False)
+        self.character.spells.append(self.selected_spell)
+        #send embed
+        await interaction.message.edit(embed=embed)
+
         await interaction.response.defer()
 
 
@@ -195,3 +274,15 @@ class StatsDistributionUI(View):
 
         # delete the thread
         await self.thread.delete()
+
+
+    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.red, custom_id="cancel")
+    async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
+        # send blank response
+        await interaction.response.defer()
+
+        # delete the thread
+        await self.thread.delete()
+
+
+

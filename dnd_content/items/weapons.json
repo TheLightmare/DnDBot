@@ -1,0 +1,16 @@
+{
+  "Wooden Club":{
+    "name":"Club",
+    "description":"a sturdy piece of wood",
+    "image":"",
+    "twoHanded":false,
+    "attack":"1D4"
+  },
+  "Great Sword of Artorias": {
+    "name":"Great Sword of Artorias",
+    "description":"a sword of legend wielded by the great Artorias, the Abysswalker.",
+    "image":"",
+    "twoHanded":true,
+    "attack":"1D12"
+  }
+}

@@ -79,8 +79,16 @@ async def create_character(bot, thread, author):
     await thread.send(embed = embed, view = dnd_ui.CharacterCreationUI(character))
 
     #create character equipment/spells embed
-    embed = discord.Embed(title="Equipment and Spêlls", description="use the scroll menus ")
-    #TODO finish the spells and equipment selection menu
+    embed = discord.Embed(title="Equipment", description="use the arrows to select the slot and then choose the item/spell", color=0x00ff00)
+    embed.add_field(name="Equipment", value="*Choose equipment*", inline=False)
+
+    await thread.send(embed = embed, view = dnd_ui.EquipmentUI(character))
+
+    #create character spells embed
+    embed = discord.Embed(title="Spells", description="choose the spells in the scroll menu and add them using the button", color=0x00ff00)
+    embed.add_field(name="Spells", value="*Choose spells*", inline=False)
+
+    await thread.send(embed = embed, view = dnd_ui.SpellsUI(character))
 
     # create stats embed
     embed = discord.Embed(title="Stat distribution", description="Distribute your stats", color=0x00ff00)
@@ -109,3 +117,10 @@ def load_races():
     with open(CONTENT_FOLDER + "races/races.json", 'r') as f:
         races = json.load(f)
     return races["Races"]
+
+# function to load weapons.json in a python list
+def load_weapons():
+    with open(CONTENT_FOLDER + "items/weapons.json", 'r') as f:
+        weapons = json.load(f)
+        print(weapons)
+    return weapons

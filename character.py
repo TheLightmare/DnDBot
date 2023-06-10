@@ -36,13 +36,13 @@ class Character():
 
         if str(self.author.id) in characters:
             # load character
-            character = characters[str(self.author)]
+            character = characters[str(self.author.id)]
             #load stats
             self.stats = character["stats"]
             #load race
             self.race = character["race"]
             #load job
-            self.job = character["job"]
+            self.job = character["class"]
             #load inventory
             self.inventory = character["inventory"]
             #load spells
@@ -75,6 +75,15 @@ class Character():
             "spells": self.spells
 
         }
+
+        with open(settings.CHARACTER_FOLDER + 'characters.json', 'w') as f:
+            json.dump(characters, f, indent=4)
+
+    def delete(self):
+        with open(settings.CHARACTER_FOLDER + 'characters.json', 'r') as f:
+            characters = json.load(f)
+
+        del characters[str(self.author.id)]
 
         with open(settings.CHARACTER_FOLDER + 'characters.json', 'w') as f:
             json.dump(characters, f, indent=4)
