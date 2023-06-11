@@ -1,12 +1,10 @@
-{ "Classes" :
-  [
-    "Paladin",
-    "Monk",
-    "Warlock",
-    "Druid",
-    "Rogue",
-    "Cleric",
-    "Bard",
-    "Ranger"
-  ]
+{
+  "Fighter":{
+    "name": "Fighter",
+    "description": "A master of martial combat, skilled with a variety of weapons and armor"
+  },
+    "Ranger":{
+        "name": "Ranger",
+        "description": "A warrior who combats threats on the edges of civilization"
+    }
 }

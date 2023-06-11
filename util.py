@@ -93,7 +93,7 @@ async def create_character(bot, thread, author):
 
     # create stats embed
     embed = discord.Embed(title="Stat distribution", description="Distribute your stats", color=0x00ff00)
-    embed.add_field(name="POINTS LEFT", value="10", inline=False)
+    embed.add_field(name="POINTS LEFT", value=str(character.unspent_points), inline=False)
     embed.add_field(name="===================", value="", inline=False)
     embed.add_field(name="Strength", value="10", inline=False)
     embed.add_field(name="Dexterity", value="10", inline=False)
@@ -112,6 +112,7 @@ async def load_modifiers_UI(bot, message, character):
     embed = message.embeds[0]
 
     # modify the embed
+    embed.set_field_at(0, name="POINTS LEFT", value=str(character.unspent_points), inline=False)
     embed.set_field_at(2, name="Strength", value=f"{character.stats['strength']} ({character.get_modifier('strength')})", inline=False)
     embed.set_field_at(3, name="Dexterity", value=f"{character.stats['dexterity']} ({character.get_modifier('dexterity')})", inline=False)
     embed.set_field_at(4, name="Constitution", value=f"{character.stats['constitution']} ({character.get_modifier('constitution')})", inline=False)
@@ -121,6 +122,46 @@ async def load_modifiers_UI(bot, message, character):
 
     # send the embed
     await message.edit(embed=embed)
+
+
+async def character_sheet(bot, thread, author: discord.Member):
+    # create a character object
+    character = Character(author)
+    character.load()
+
+    # create character sheet embed
+    embed = discord.Embed(title="Character sheet", description=f"Here is {author.mention}'s character sheet", color=0x00ff00)
+    embed.add_field(name="Name", value=character.name, inline=False)
+    embed.add_field(name="Age", value=character.age, inline=False)
+    embed.add_field(name="Race", value=character.race, inline=False)
+    embed.add_field(name="Class", value=character.job, inline=False)
+
+    # add stats
+    embed.add_field(name="===================", value="", inline=False)
+    embed.add_field(name="Strength", value=f"{character.stats['strength']} ({character.get_modifier('strength')})", inline=False)
+    embed.add_field(name="Dexterity", value=f"{character.stats['dexterity']} ({character.get_modifier('dexterity')})", inline=False)
+    embed.add_field(name="Constitution", value=f"{character.stats['constitution']} ({character.get_modifier('constitution')})", inline=False)
+    embed.add_field(name="Intelligence", value=f"{character.stats['intelligence']} ({character.get_modifier('intelligence')})", inline=False)
+    embed.add_field(name="Wisdom", value=f"{character.stats['wisdom']} ({character.get_modifier('wisdom')})", inline=False)
+    embed.add_field(name="Charisma", value=f"{character.stats['charisma']} ({character.get_modifier('charisma')})", inline=False)
+
+    # add equipment
+    embed.add_field(name="===================", value="", inline=False)
+    inventory = ""
+    for item in character.inventory:
+        inventory += f"- {item}\n"
+    embed.add_field(name="Equipment", value=character.inventory, inline=False)
+
+    # add spells
+    embed.add_field(name="===================", value="", inline=False)
+    spells = ""
+    for spell in character.spells:
+        spells += f"- {spell}\n"
+    embed.add_field(name="Spells", value=spells, inline=False)
+
+    # send the embed
+    await thread.send(embed = embed)
+
 
 
 #

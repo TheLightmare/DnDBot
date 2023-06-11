@@ -19,6 +19,17 @@ def load_weapons(max_tier) -> list:
             options.append(SelectOption(label=weapon["name"], value=weapon["name"], description=weapon["description"]))
     return options
 
+def load_spells(max_level) -> list:
+    spells = {}
+    with open(CONTENT_FOLDER + "spells/" + "spells.json", "r") as file:
+        spells = json.load(file)
+    options = []
+    for element in spells:
+        spell = spells[element]
+        if spell["level"] <= max_level:
+            options.append(SelectOption(label=spell["name"], value=spell["name"], description=spell["description"]))
+    return options
+
 def load_races() -> list:
     races = {}
     with open(CONTENT_FOLDER + "races/" + "races.json", "r") as file:
@@ -28,6 +39,17 @@ def load_races() -> list:
         race = races[element]
         options.append(SelectOption(label=race["name"], value=race["name"], description=race["description"]))
     return options
+
+def load_classes() -> list:
+    classes = {}
+    with open(CONTENT_FOLDER + "classes/" + "classes.json", "r") as file:
+        classes = json.load(file)
+    options = []
+    for element in classes:
+        class_ = classes[element]
+        options.append(SelectOption(label=class_["name"], value=class_["name"], description=class_["description"]))
+    return options
+
 
 
 
@@ -97,20 +119,7 @@ class CharacterCreationUI(View):
 
         await interaction.response.defer()
 
-    @discord.ui.select(options=[
-        discord.SelectOption(label="Barbarian", value="Barbarian"),
-        discord.SelectOption(label="Bard", value="Bard"),
-        discord.SelectOption(label="Cleric", value="Cleric"),
-        discord.SelectOption(label="Druid", value="Druid"),
-        discord.SelectOption(label="Fighter", value="Fighter"),
-        discord.SelectOption(label="Monk", value="Monk"),
-        discord.SelectOption(label="Paladin", value="Paladin"),
-        discord.SelectOption(label="Ranger", value="Ranger"),
-        discord.SelectOption(label="Rogue", value="Rogue"),
-        discord.SelectOption(label="Sorcerer", value="Sorcerer"),
-        discord.SelectOption(label="Warlock", value="Warlock"),
-        discord.SelectOption(label="Wizard", value="Wizard")
-    ], placeholder="Choose a class")
+    @discord.ui.select(options=load_classes(), placeholder="Choose a class")
     async def class_select(self, interaction: discord.Interaction, select: discord.ui.Select):
         #get embed
         embed = interaction.message.embeds[0]
@@ -134,7 +143,6 @@ class EquipmentUI(View):
         self.character = character
         self.selected_equipment = None
 
-    #TODO: make so the equipment list is loaded from the weapons.json file
     @discord.ui.select(options=load_weapons(1), placeholder="Choose a piece of equipment")
     async def equipmentselect(self, interaction: discord.Interaction, select: discord.ui.Select):
         self.selected_equipment = select.values[0]
@@ -165,10 +173,7 @@ class SpellsUI(View):
         self.selected_spell = None
         self.current_spells = ""
 
-    #TODO: make so spells are loaded from the spells.json file
-    @discord.ui.select(options=[
-        discord.SelectOption(label="Acid Splash", value="Acid Splash", description="[Atk Type]: zone + ranged, [Dmg Type]: acid, [Dmg]: 1d6"),
-    ], placeholder="Choose a spell")
+    @discord.ui.select(options=load_spells(1), placeholder="Choose a spell")
     async def spellselect(self, interaction: discord.Interaction, select: discord.ui.Select):
         self.selected_spell = select.values[0]
         await interaction.response.defer()
@@ -199,12 +204,12 @@ class StatsDistributionUI(View):
         self.thread = thread
         self.character = character
 
-    @discord.ui.select(options=[discord.SelectOption(label="Strength", value="Strength"),
-                        discord.SelectOption(label="Dexterity", value="Dexterity"),
-                        discord.SelectOption(label="Constitution", value="Constitution"),
-                        discord.SelectOption(label="Intelligence", value="Intelligence"),
-                        discord.SelectOption(label="Wisdom", value="Wisdom"),
-                        discord.SelectOption(label="Charisma", value="Charisma")],
+    @discord.ui.select(options=[discord.SelectOption(label="Strength", value="strength"),
+                        discord.SelectOption(label="Dexterity", value="dexterity"),
+                        discord.SelectOption(label="Constitution", value="constitution"),
+                        discord.SelectOption(label="Intelligence", value="intelligence"),
+                        discord.SelectOption(label="Wisdom", value="wisdom"),
+                        discord.SelectOption(label="Charisma", value="charisma")],
                        placeholder="Choose stat to edit")
     async def statselect(self, interaction: discord.Interaction, select: discord.ui.Select):
         self.current_stat = select.values[0]
@@ -216,26 +221,24 @@ class StatsDistributionUI(View):
         embed = interaction.message.embeds[0]
         # get message content
         content = interaction.message.content
-        #get the remaining points
-        points = int(embed.fields[0].value)
 
         # get the stat that the user wants to decrease
         stat = self.current_stat
-        # get the value of the stat
-        value = 10
+        # get the value of the stat and the field
+        value = self.character.stats[stat]
         selected_field = None
         for field in embed.fields:
-            if stat == field.name:
+            if field.name.lower() == stat:
                 selected_field = field
-                value = int(embed.fields[embed.fields.index(field)].value)
+                break
         # decrease the value of the stat
         if value > 0:
             value -= 1
-            points += 1
+            self.character.unspent_points += 1
         # update the embed
-
-        embed.set_field_at(embed.fields.index(selected_field), name=stat, value=str(value), inline=False)
-        embed.set_field_at(0, name="POINTS LEFT", value=str(points), inline=False)
+        modifier = self.character.stat_modifiers[stat]["race"]
+        embed.set_field_at(embed.fields.index(selected_field), name=stat, value=f"{str(value)} ({modifier})", inline=False)
+        embed.set_field_at(0, name="POINTS LEFT", value=str(self.character.unspent_points), inline=False)
         self.character.stats[stat] = value
 
 
@@ -250,26 +253,25 @@ class StatsDistributionUI(View):
         embed = interaction.message.embeds[0]
         # get message content
         content = interaction.message.content
-        #get the remaining points
-        points = int(embed.fields[0].value)
 
         # get the stat that the user wants to decrease
         stat = self.current_stat
-        # get the value of the stat
-        value = 10
+        # get the value of the stat and the field
+        value = self.character.stats[stat]
         selected_field = None
         for field in embed.fields:
-            if stat == field.name:
+            if field.name.lower() == stat:
                 selected_field = field
-                value = int(embed.fields[embed.fields.index(field)].value)
+                break
         # decrease the value of the stat
-        if points < 20 and points > 0:
+        if value < 20 and self.character.unspent_points > 0:
             value += 1
-            points -= 1
+            self.character.unspent_points -= 1
         # update the embed
 
-        embed.set_field_at(embed.fields.index(selected_field), name=stat, value=str(value), inline=False)
-        embed.set_field_at(0, name="POINTS LEFT", value=str(points), inline=False)
+        modifier = self.character.stat_modifiers[stat]["race"]
+        embed.set_field_at(embed.fields.index(selected_field), name=stat, value=f"{str(value)} ({modifier})", inline=False)
+        embed.set_field_at(0, name="POINTS LEFT", value=str(self.character.unspent_points), inline=False)
         self.character.stats[stat] = value
 
         await interaction.message.edit(content=content, embed=embed)
@@ -281,7 +283,6 @@ class StatsDistributionUI(View):
     async def confirm(self, interaction: discord.Interaction, button: discord.ui.Button):
         # save the character
         self.character.save()
-
 
         # send blank response
         await interaction.response.defer()

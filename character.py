@@ -18,6 +18,7 @@ class Character():
 
         self.level = 1
         self.xp = 0
+        self.unspent_points = 10
 
         self.stats = {
             "strength": 10,
@@ -28,12 +29,24 @@ class Character():
             "charisma": 10
         }
         self.stat_modifiers = {
-            "strength": {},
-            "dexterity": {},
-            "constitution": {},
-            "intelligence": {},
-            "wisdom": {},
-            "charisma": {}
+            "strength": {
+                "race": 0
+            },
+            "dexterity": {
+                "race": 0
+            },
+            "constitution": {
+                "race": 0
+            },
+            "intelligence": {
+                "race": 0
+            },
+            "wisdom": {
+                "race": 0
+            },
+            "charisma": {
+                "race": 0
+            }
         }
 
         self.inventory = []
@@ -66,6 +79,8 @@ class Character():
             character = characters[str(self.author.id)]
             #load stats
             self.stats = character["stats"]
+            #load stat modifiers
+            self.stat_modifiers = character["stat_modifiers"]
             #load race
             self.race = character["race"]
             #load job
@@ -78,8 +93,12 @@ class Character():
             self.level = character["level"]
             #load xp
             self.xp = character["xp"]
+            #load unspent points
+            self.unspent_points = character["unspent_points"]
             #load name
             self.name = character["name"]
+            #load age
+            self.age = character["age"]
             return True
 
         return False
@@ -96,8 +115,11 @@ class Character():
 
             "level": self.level,
             "xp": self.xp,
+            "unspent_points": self.unspent_points,
 
             "stats": self.stats,
+            "stat_modifiers": self.stat_modifiers,
+
             "inventory": self.inventory,
             "spells": self.spells
 
