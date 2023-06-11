@@ -4,6 +4,8 @@ import settings
 import asyncio
 import discord
 
+import util
+
 
 class Character():
     def __init__(self, author: discord.Member):
@@ -25,10 +27,35 @@ class Character():
             "wisdom": 10,
             "charisma": 10
         }
+        self.stat_modifiers = {
+            "strength": {},
+            "dexterity": {},
+            "constitution": {},
+            "intelligence": {},
+            "wisdom": {},
+            "charisma": {}
+        }
 
         self.inventory = []
 
         self.spells = []
+
+    def set_race(self, race_name):
+        races = util.load_races()
+        race = races[race_name]
+
+        self.race = race["name"]
+        stat_bonus = race["stat_bonus"]
+        for stat in stat_bonus:
+            value = stat_bonus[stat]
+            self.stat_modifiers[stat]["race"] = value
+
+    def get_modifier(self, stat):
+        modifier = 0
+        for source in self.stat_modifiers[stat]:
+            modifier += self.stat_modifiers[stat][source]
+        return modifier
+
 
     def load(self):
         with open(settings.CHARACTER_FOLDER + 'characters.json', 'r') as f:

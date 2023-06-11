@@ -1,12 +1,119 @@
 {
-  "Races": [
-    "Human",
-    "Dwarf",
-    "Elf",
-    "Gnome",
-    "Half-Elf",
-    "Half-Orc",
-    "Halfling",
-    "Tiefling"
-  ]
+  "Human": {
+    "name": "Human",
+    "description": "A human being.",
+    "plural": "Humans",
+    "stat_bonus": {
+      "strength": 1,
+      "dexterity": 1,
+      "constitution": 1,
+      "intelligence": 1,
+      "wisdom": 1,
+      "charisma": 1
+    }
+  },
+  "Elf": {
+    "name": "Elf",
+    "description": "A tall, slender humanoid with pointelligenceed ears.",
+    "plural": "Elves",
+    "stat_bonus": {
+      "strength": 0,
+      "dexterity": 2,
+      "constitution": 0,
+      "intelligence": 2,
+      "wisdom": 0,
+      "charisma": 0
+    }
+  },
+  "Dwarf": {
+    "name": "Dwarf",
+    "description": "A short, stocky humanoid with a long beard.",
+    "plural": "Dwarves",
+    "stat_bonus": {
+      "strength": 2,
+      "dexerity": 0,
+      "constitution": 2,
+      "intelligence": 0,
+      "wisdom": 0,
+      "charisma": 0
+    }
+  },
+  "Halfling": {
+    "name": "Halfling",
+    "description": "A short, nimble humanoid with hairy feet.",
+    "plural": "Halflings",
+    "stat_bonus": {
+      "strength": 0,
+      "dexterity": 2,
+      "constitution": 0,
+      "intelligence": 0,
+      "wisdom": 0,
+      "charisma": 0
+    }
+  },
+  "Gnome": {
+    "name": "Gnome",
+    "description": "A short, stocky humanoid with a long beard.",
+    "plural": "Gnomes",
+    "stat_bonus": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 2,
+        "intelligence": 2,
+        "wisdom": 0,
+        "charisma": 0
+    }
+  },
+  "Half-Elf": {
+    "name": "Half-Elf",
+    "description": "A tall, slender humanoid with pointelligenceed ears.",
+    "plural": "Half-Elves",
+    "stat_bonus": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "wisdom": 0,
+        "charisma": 2
+    }
+  },
+  "Half-Orc": {
+    "name": "Half-Orc",
+    "description": "A tall, muscular humanoid with green skin.",
+    "plural": "Half-Orcs",
+    "stat_bonus": {
+        "strength": 2,
+        "dexterity": 0,
+        "constitution": 1,
+        "intelligence": 0,
+        "wisdom": 0,
+        "charisma": 0
+    }
+  },
+  "Tiefling": {
+    "name": "Tiefling",
+    "description": "A tall, slender humanoid with horns and dark skin.",
+    "plural": "Tieflings",
+    "stat_bonus": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 1,
+        "wisdom": 0,
+        "charisma": 2
+    }
+  },
+  "Dragonborn": {
+    "name": "Dragonborn",
+    "description": "A tall, muscular humanoid with scaly skin and a tail.",
+    "plural": "Dragonborn",
+    "stat_bonus": {
+        "strength": 2,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "wisdom": 0,
+        "charisma": 1
+    }
+  }
 }

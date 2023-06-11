@@ -1,5 +1,6 @@
 import asyncio
 import discord
+from discord.ext import tasks
 from discord.ui import Button, View, Select
 from discord.components import SelectOption
 import dnd_ui
@@ -101,8 +102,28 @@ async def create_character(bot, thread, author):
     embed.add_field(name="Wisdom", value="10", inline=False)
     embed.add_field(name="Charisma", value="10", inline=False)
 
-    await thread.send(embed = embed, view = dnd_ui.StatsDistributionUI(thread, character))
+    stat_message = await thread.send(embed = embed, view = dnd_ui.StatsDistributionUI(thread, character))
+    await load_modifiers_UI.start(bot, stat_message, character)
 
+
+@tasks.loop(seconds=5)
+async def load_modifiers_UI(bot, message, character):
+    # get embed
+    embed = message.embeds[0]
+
+    # modify the embed
+    embed.set_field_at(2, name="Strength", value=f"{character.stats['strength']} ({character.get_modifier('strength')})", inline=False)
+    embed.set_field_at(3, name="Dexterity", value=f"{character.stats['dexterity']} ({character.get_modifier('dexterity')})", inline=False)
+    embed.set_field_at(4, name="Constitution", value=f"{character.stats['constitution']} ({character.get_modifier('constitution')})", inline=False)
+    embed.set_field_at(5, name="Intelligence", value=f"{character.stats['intelligence']} ({character.get_modifier('intelligence')})", inline=False)
+    embed.set_field_at(6, name="Wisdom", value=f"{character.stats['wisdom']} ({character.get_modifier('wisdom')})", inline=False)
+    embed.set_field_at(7, name="Charisma", value=f"{character.stats['charisma']} ({character.get_modifier('charisma')})", inline=False)
+
+    # send the embed
+    await message.edit(embed=embed)
+
+
+#
 
 
 # function to load classes.json in a python list
@@ -116,7 +137,7 @@ def load_classes():
 def load_races():
     with open(CONTENT_FOLDER + "races/races.json", 'r') as f:
         races = json.load(f)
-    return races["Races"]
+    return races
 
 # function to load weapons.json in a python list
 def load_weapons():

@@ -3,7 +3,33 @@ import asyncio
 import discord
 from settings import *
 from discord.ui import Modal, Button, View, Select, TextInput
+from discord.components import SelectOption
 from settings import *
+
+
+# preloads stuff into SelectOptions
+def load_weapons(max_tier) -> list:
+    weapons = {}
+    with open(CONTENT_FOLDER + "items/" + "weapons.json", "r") as file:
+        weapons = json.load(file)
+    options = []
+    for element in weapons:
+        weapon = weapons[element]
+        if weapon["tier"] <= max_tier:
+            options.append(SelectOption(label=weapon["name"], value=weapon["name"], description=weapon["description"]))
+    return options
+
+def load_races() -> list:
+    races = {}
+    with open(CONTENT_FOLDER + "races/" + "races.json", "r") as file:
+        races = json.load(file)
+    options = []
+    for element in races:
+        race = races[element]
+        options.append(SelectOption(label=race["name"], value=race["name"], description=race["description"]))
+    return options
+
+
 
 # made this crap because Discord API does not let me use TextInputs in Views
 class CharacterCreationModal(Modal):
@@ -59,23 +85,13 @@ class CharacterCreationUI(View):
 
 
     # racism moment
-    @discord.ui.select(options=[
-        discord.SelectOption(label="Human", value="Human"),
-        discord.SelectOption(label="Elf", value="Elf"),
-        discord.SelectOption(label="Dwarf", value="Dwarf"),
-        discord.SelectOption(label="Halfling", value="Halfling"),
-        discord.SelectOption(label="Dragonborn", value="Dragonborn"),
-        discord.SelectOption(label="Gnome", value="Gnome"),
-        discord.SelectOption(label="Half-Elf", value="Half-Elf"),
-        discord.SelectOption(label="Half-Orc", value="Half-Orc"),
-        discord.SelectOption(label="Tiefling", value="Tiefling")
-    ], placeholder="Choose a race")
+    @discord.ui.select(options=load_races(), placeholder="Choose a race")
     async def race_select(self, interaction: discord.Interaction, select: discord.ui.Select):
         #get embed
         embed = interaction.message.embeds[0]
         #modify embed
         embed.set_field_at(2, name="Race", value=select.values[0], inline=False)
-        self.character.race = select.values[0]
+        self.character.set_race(select.values[0])
         #send embed
         await interaction.message.edit(embed=embed)
 
@@ -119,9 +135,7 @@ class EquipmentUI(View):
         self.selected_equipment = None
 
     #TODO: make so the equipment list is loaded from the weapons.json file
-    @discord.ui.select(options=[
-        discord.SelectOption(label="Club", value="Club"),
-    ], placeholder="Choose a piece of equipment")
+    @discord.ui.select(options=load_weapons(1), placeholder="Choose a piece of equipment")
     async def equipmentselect(self, interaction: discord.Interaction, select: discord.ui.Select):
         self.selected_equipment = select.values[0]
 
