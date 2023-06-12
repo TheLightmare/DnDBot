@@ -5,7 +5,7 @@ from settings import *
 from discord.ui import Modal, Button, View, Select, TextInput
 from discord.components import SelectOption
 from settings import *
-
+import spell
 
 # preloads stuff into SelectOptions
 def load_weapons(max_tier) -> list:
@@ -27,7 +27,7 @@ def load_spells(max_level) -> list:
     for element in spells:
         spell = spells[element]
         if spell["level"] <= max_level:
-            options.append(SelectOption(label=spell["name"], value=spell["name"], description=spell["description"]))
+            options.append(SelectOption(label=spell["name"] + f" lvl:{spell['level']}", value=spell["name"], description=spell["description"]))
     return options
 
 def load_races() -> list:
@@ -51,6 +51,30 @@ def load_classes() -> list:
     return options
 
 
+async def update_spells_ui(message, character):
+    # get embed
+    embed = message.embeds[0]
+    embed.clear_fields()
+
+    # modify the embed
+    for tier in range(9):
+        if character.spell_slots[tier] != 0:
+            value = ""
+            for j in range(character.spell_slots[tier]):
+                if j < len(character.spells[tier]):
+                    value += f"- {character.spells[tier][j].name}\n"
+                else:
+                    value += f"- *Choose spell*\n"
+            embed.add_field(name=f"Level {tier}", value=value, inline=False)
+
+    # send the embed
+    await message.edit(embed=embed)
+
+def is_spell_in_list(spell, spell_list):
+    for element in spell_list:
+        if element.name == spell.name:
+            return True
+    return False
 
 
 # made this crap because Discord API does not let me use TextInputs in Views
@@ -104,6 +128,7 @@ class CharacterCreationUI(View):
     def __init__(self, character) -> None:
         super().__init__(timeout=None)
         self.character = character
+        self.finished = False
 
 
     # racism moment
@@ -125,7 +150,7 @@ class CharacterCreationUI(View):
         embed = interaction.message.embeds[0]
         #modify embed
         embed.set_field_at(3, name="Class", value=select.values[0], inline=False)
-        self.character.job = select.values[0]
+        self.character.set_job(select.values[0])
         #send embed
         await interaction.message.edit(embed=embed)
 
@@ -135,6 +160,11 @@ class CharacterCreationUI(View):
     async def create_character(self, interaction: discord.Interaction, button: discord.ui.Button):
         modal = CharacterCreationModal(self.character)
         await interaction.response.send_modal(modal)
+
+    @discord.ui.button(label="NEXT", style=discord.ButtonStyle.green)
+    async def next(self, interaction: discord.Interaction, button: discord.ui.Button):
+        self.finished = True
+        await interaction.response.defer()
 
 
 class EquipmentUI(View):
@@ -170,12 +200,14 @@ class SpellsUI(View):
     def __init__(self, character) -> None:
         super().__init__(timeout=None)
         self.character = character
-        self.selected_spell = None
-        self.current_spells = ""
+        self.selected_spell = spell.Spell()
+
+        # pile of spells
+        self.spells = []
 
     @discord.ui.select(options=load_spells(1), placeholder="Choose a spell")
     async def spellselect(self, interaction: discord.Interaction, select: discord.ui.Select):
-        self.selected_spell = select.values[0]
+        self.selected_spell.load(select.values[0])
         await interaction.response.defer()
 
     @discord.ui.button(label="Add Spell", style=discord.ButtonStyle.blurple)
@@ -184,14 +216,33 @@ class SpellsUI(View):
             await interaction.response.send_message("Please select a spell", ephemeral=True, delete_after=5)
             return
 
-        #get embed
-        embed = interaction.message.embeds[0]
-        #modify embed
-        self.current_spells += "- " + self.selected_spell + "\n"
-        embed.set_field_at(0, name="Spells", value=self.current_spells, inline=False)
-        self.character.spells.append(self.selected_spell)
-        #send embed
-        await interaction.message.edit(embed=embed)
+        # check if the character already has the spell or if no slots are available
+        if is_spell_in_list(self.selected_spell, self.character.spells[self.selected_spell.level])\
+                or len(self.character.spells[self.selected_spell.level]) >= self.character.spell_slots[self.selected_spell.level]:
+            await interaction.response.send_message("You already have this spell or no slots are available", ephemeral=True, delete_after=5)
+            return
+
+        self.character.spells[self.selected_spell.level].append(self.selected_spell.copy())
+        # add the spell to the pile of spells
+        self.spells.append(self.selected_spell.copy())
+
+        # update the embed
+        await update_spells_ui(interaction.message, self.character)
+
+        await interaction.response.defer()
+
+
+    @discord.ui.button(label="remove latest spell", style=discord.ButtonStyle.red)
+    async def removespell(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if len(self.spells) == 0:
+            await interaction.response.defer()
+            return
+
+        self.latest_spell = self.spells.pop()
+        self.character.spells[self.latest_spell.level].pop()
+
+        # update the embed
+        await update_spells_ui(interaction.message, self.character)
 
         await interaction.response.defer()
 
@@ -282,6 +333,8 @@ class StatsDistributionUI(View):
     @discord.ui.button(label="Confirm", style=discord.ButtonStyle.green, custom_id="confirm")
     async def confirm(self, interaction: discord.Interaction, button: discord.ui.Button):
         # save the character
+        self.character.level = 1
+        self.character.apply_level_up()
         self.character.save()
 
         # send blank response

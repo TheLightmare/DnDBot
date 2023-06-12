@@ -1,10 +1,62 @@
 {
   "Fighter":{
     "name": "Fighter",
-    "description": "A master of martial combat, skilled with a variety of weapons and armor"
+    "description": "A master of martial combat, skilled with a variety of weapons and armor",
+
+    "levelup_pattern":[
+      {
+
+      },
+      {
+
+      }
+    ]
   },
     "Ranger":{
         "name": "Ranger",
         "description": "A warrior who combats threats on the edges of civilization"
-    }
+    },
+
+  "Wizard":{
+    "name": "Wizard",
+    "description": "A scholarly magic-user capable of manipulating the structures of reality",
+
+    "levelup_pattern": [
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Spellcasting",
+          "Arcane Tradition"
+        ],
+        "spell_slots": [
+          3,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Arcane Tradition"
+        ],
+        "spell_slots": [
+          3,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  }
 }

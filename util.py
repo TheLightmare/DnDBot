@@ -77,7 +77,10 @@ async def create_character(bot, thread, author):
     embed.add_field(name="Race", value="*Choose race*", inline=False)
     embed.add_field(name="Class", value="*Choose class*", inline=False)
 
-    await thread.send(embed = embed, view = dnd_ui.CharacterCreationUI(character))
+    character_view = dnd_ui.CharacterCreationUI(character)
+    await thread.send(embed = embed, view = character_view)
+    while not character_view.finished:
+        await asyncio.sleep(1)
 
     #create character equipment/spells embed
     embed = discord.Embed(title="Equipment", description="use the arrows to select the slot and then choose the item/spell", color=0x00ff00)
@@ -87,9 +90,16 @@ async def create_character(bot, thread, author):
 
     #create character spells embed
     embed = discord.Embed(title="Spells", description="choose the spells in the scroll menu and add them using the button", color=0x00ff00)
-    embed.add_field(name="Spells", value="*Choose spells*", inline=False)
 
-    await thread.send(embed = embed, view = dnd_ui.SpellsUI(character))
+    for i in range(9):
+        if character.spell_slots[i] != 0:
+            embed.add_field(name=f"Level {i}", value="*Choose spells* **<===**", inline=False)
+            value = ""
+            for j in range(character.spell_slots[i]):
+                value += f"- *Choose spell*\n"
+            embed.set_field_at(i, name=f"Level {i}", value=value, inline=False)
+    spells_message = await thread.send(embed = embed, view = dnd_ui.SpellsUI(character))
+
 
     # create stats embed
     embed = discord.Embed(title="Stat distribution", description="Distribute your stats", color=0x00ff00)
@@ -103,10 +113,14 @@ async def create_character(bot, thread, author):
     embed.add_field(name="Charisma", value="10", inline=False)
 
     stat_message = await thread.send(embed = embed, view = dnd_ui.StatsDistributionUI(thread, character))
-    await load_modifiers_UI.start(bot, stat_message, character)
+    await refresh_ui.start(bot, [stat_message, spells_message], character)
 
 
 @tasks.loop(seconds=5)
+async def refresh_ui(bot, messages, character):
+    await load_modifiers_UI(bot, messages[0], character)
+    #await load_spell_slots_UI(bot, messages[1], character)
+
 async def load_modifiers_UI(bot, message, character):
     # get embed
     embed = message.embeds[0]
@@ -119,6 +133,27 @@ async def load_modifiers_UI(bot, message, character):
     embed.set_field_at(5, name="Intelligence", value=f"{character.stats['intelligence']} ({character.get_modifier('intelligence')})", inline=False)
     embed.set_field_at(6, name="Wisdom", value=f"{character.stats['wisdom']} ({character.get_modifier('wisdom')})", inline=False)
     embed.set_field_at(7, name="Charisma", value=f"{character.stats['charisma']} ({character.get_modifier('charisma')})", inline=False)
+
+    # send the embed
+    await message.edit(embed=embed)
+
+
+async def load_spell_slots_UI(bot, message, character):
+    # get embed
+    embed = message.embeds[0]
+    embed.clear_fields()
+
+    # modify the embed
+    for i in range(9):
+        if character.spell_slots[i] != 0:
+            embed.add_field(name=f"Level {i}", value="*Choose spells*", inline=False)
+            value = ""
+            for j in range(character.spell_slots[i]):
+                if j < len(character.spells[i]):
+                    value += f"- {character.spells[i][j].name}\n"
+                else:
+                    value += f"- *Choose spell*\n"
+            embed.set_field_at(i, name=f"Level {i}", value=value, inline=False)
 
     # send the embed
     await message.edit(embed=embed)
@@ -171,7 +206,7 @@ async def character_sheet(bot, thread, author: discord.Member):
 def load_classes():
     with open(CONTENT_FOLDER + 'classes/classes.json', 'r') as f:
         classes = json.load(f)
-    return classes["Classes"]
+    return classes
 
 
 # function to load races.json in a python list

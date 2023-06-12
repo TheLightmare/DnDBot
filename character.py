@@ -1,11 +1,10 @@
 import json
-import settings
-
+from settings import *
 import asyncio
 import discord
 
 import util
-
+import spell
 
 class Character():
     def __init__(self, author: discord.Member):
@@ -19,6 +18,7 @@ class Character():
         self.level = 1
         self.xp = 0
         self.unspent_points = 10
+
 
         self.stats = {
             "strength": 10,
@@ -49,9 +49,26 @@ class Character():
             }
         }
 
+        self.features = []
+
         self.inventory = []
 
-        self.spells = []
+        self.spell_slots = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.spells = [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
+
+        self.proficiencies = []
+        self.proficiency_bonus = 2
+
 
     def set_race(self, race_name):
         races = util.load_races()
@@ -63,6 +80,32 @@ class Character():
             value = stat_bonus[stat]
             self.stat_modifiers[stat]["race"] = value
 
+    def set_job(self, job_name):
+        classes = util.load_classes()
+        job = classes[job_name]
+
+        self.job = job["name"]
+        self.spell_slots = job["levelup_pattern"][0]["spell_slots"]
+        self.proficiency_bonus = job["levelup_pattern"][0]["proficiency_bonus"]
+
+    # basically a warcrime but it works
+    # you must increase the level before applying the level up
+    def apply_level_up(self):
+        with open(CONTENT_FOLDER + 'classes/' + 'classes.json', 'r') as f:
+            classes = json.load(f)
+        job = classes[self.job]
+        levelup_pattern = job["levelup_pattern"][self.level - 1]
+        self.proficiency_bonus = levelup_pattern["proficiency_bonus"]
+        features = levelup_pattern["features"]
+        self.spell_slots = levelup_pattern["spell_slots"]
+
+        for feature in features:
+            if feature != "Ability Score Improvement":
+                self.features.append(feature)
+            else :
+                self.unspent_points += 2
+
+
     def get_modifier(self, stat):
         modifier = 0
         for source in self.stat_modifiers[stat]:
@@ -71,7 +114,7 @@ class Character():
 
 
     def load(self):
-        with open(settings.CHARACTER_FOLDER + 'characters.json', 'r') as f:
+        with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
             characters = json.load(f)
 
         if str(self.author.id) in characters:
@@ -87,6 +130,8 @@ class Character():
             self.job = character["class"]
             #load inventory
             self.inventory = character["inventory"]
+            #load spell slots
+            self.spell_slots = character["spell_slots"]
             #load spells
             self.spells = character["spells"]
             #load level
@@ -104,7 +149,7 @@ class Character():
         return False
 
     def save(self):
-        with open(settings.CHARACTER_FOLDER + 'characters.json', 'r') as f:
+        with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
             characters = json.load(f)
 
         characters[str(self.author.id)] = {
@@ -121,18 +166,19 @@ class Character():
             "stat_modifiers": self.stat_modifiers,
 
             "inventory": self.inventory,
+            "spell_slots": self.spell_slots,
             "spells": self.spells
 
         }
 
-        with open(settings.CHARACTER_FOLDER + 'characters.json', 'w') as f:
+        with open(CHARACTER_FOLDER + 'characters.json', 'w') as f:
             json.dump(characters, f, indent=4)
 
     def delete(self):
-        with open(settings.CHARACTER_FOLDER + 'characters.json', 'r') as f:
+        with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
             characters = json.load(f)
 
         del characters[str(self.author.id)]
 
-        with open(settings.CHARACTER_FOLDER + 'characters.json', 'w') as f:
+        with open(CHARACTER_FOLDER + 'characters.json', 'w') as f:
             json.dump(characters, f, indent=4)
