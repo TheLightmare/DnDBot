@@ -2,18 +2,35 @@
   "Acid Splash": {
     "name": "Acid Splash",
     "description": "",
-    "level": 0
+    "level": 0,
+
+    "available": [
+        "Sorcerer",
+        "Wizard"
+    ]
 
   },
   "Fire Bolt": {
     "name": "Fire Bolt",
     "description": "",
-    "level": 0
+    "level": 0,
+
+    "available": [
+        "Sorcerer",
+        "Wizard"
+    ]
   },
     "Blade Ward": {
         "name": "Blade Ward",
         "description": "",
-        "level": 1
+        "level": 1,
+
+        "available": [
+            "Bard",
+            "Sorcerer",
+            "Warlock",
+            "Wizard"
+        ]
 
     }
 

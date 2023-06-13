@@ -219,5 +219,10 @@ def load_races():
 def load_weapons():
     with open(CONTENT_FOLDER + "items/weapons.json", 'r') as f:
         weapons = json.load(f)
-        print(weapons)
     return weapons
+
+# function to load spells.json in a python list
+def load_spells():
+    with open(CONTENT_FOLDER + "spells/spells.json", 'r') as f:
+        spells = json.load(f)
+    return spells

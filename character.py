@@ -53,6 +53,7 @@ class Character():
 
         self.inventory = []
 
+        self.available_spells = []
         self.spell_slots = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.spells = [
             [],
@@ -87,6 +88,12 @@ class Character():
         self.job = job["name"]
         self.spell_slots = job["levelup_pattern"][0]["spell_slots"]
         self.proficiency_bonus = job["levelup_pattern"][0]["proficiency_bonus"]
+
+        # load available spells
+        spells = util.load_spells()
+        for spell in spells:
+            if spells[spell]["available"] == job_name:
+                self.available_spells.append(spell)
 
     # basically a warcrime but it works
     # you must increase the level before applying the level up
@@ -140,6 +147,8 @@ class Character():
             self.xp = character["xp"]
             #load unspent points
             self.unspent_points = character["unspent_points"]
+            #load features
+            self.features = character["features"]
             #load name
             self.name = character["name"]
             #load age
@@ -164,11 +173,11 @@ class Character():
 
             "stats": self.stats,
             "stat_modifiers": self.stat_modifiers,
+            "features": self.features,
 
             "inventory": self.inventory,
             "spell_slots": self.spell_slots,
             "spells": self.spells
-
         }
 
         with open(CHARACTER_FOLDER + 'characters.json', 'w') as f:

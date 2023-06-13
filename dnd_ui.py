@@ -19,14 +19,14 @@ def load_weapons(max_tier) -> list:
             options.append(SelectOption(label=weapon["name"], value=weapon["name"], description=weapon["description"]))
     return options
 
-def load_spells(max_level) -> list:
+def load_spells(max_level, character) -> list:
     spells = {}
     with open(CONTENT_FOLDER + "spells/" + "spells.json", "r") as file:
         spells = json.load(file)
     options = []
     for element in spells:
         spell = spells[element]
-        if spell["level"] <= max_level:
+        if spell["level"] <= max_level and character.job in spell["available"]:
             options.append(SelectOption(label=spell["name"] + f" lvl:{spell['level']}", value=spell["name"], description=spell["description"]))
     return options
 
@@ -107,6 +107,7 @@ class DeleteCharacterUI(View):
         super().__init__(timeout=None)
         self.author = author
         self.character = character
+
 
     async def interaction_check(self, interaction: discord.Interaction):
         return interaction.user.id == self.author.id
@@ -205,9 +206,14 @@ class SpellsUI(View):
         # pile of spells
         self.spells = []
 
-    @discord.ui.select(options=load_spells(1), placeholder="Choose a spell")
-    async def spellselect(self, interaction: discord.Interaction, select: discord.ui.Select):
-        self.selected_spell.load(select.values[0])
+        # declare components
+        self.spellselect = discord.ui.Select(options=load_spells(1, self.character), placeholder="Choose a spell")
+        self.spellselect.callback = self.spellselect_callback
+        self.add_item(self.spellselect)
+
+    async def spellselect_callback(self, interaction: discord.Interaction):
+        select = interaction.data["values"]
+        self.selected_spell.load(select[0])
         await interaction.response.defer()
 
     @discord.ui.button(label="Add Spell", style=discord.ButtonStyle.blurple)
