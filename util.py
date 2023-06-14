@@ -117,26 +117,28 @@ async def character_sheet(bot, thread, author: discord.Member):
 
     # add stats
     embed.add_field(name="===================", value="", inline=False)
-    embed.add_field(name="Strength", value=f"{character.stats['strength']} ({character.get_modifier('strength')})", inline=False)
-    embed.add_field(name="Dexterity", value=f"{character.stats['dexterity']} ({character.get_modifier('dexterity')})", inline=False)
-    embed.add_field(name="Constitution", value=f"{character.stats['constitution']} ({character.get_modifier('constitution')})", inline=False)
-    embed.add_field(name="Intelligence", value=f"{character.stats['intelligence']} ({character.get_modifier('intelligence')})", inline=False)
-    embed.add_field(name="Wisdom", value=f"{character.stats['wisdom']} ({character.get_modifier('wisdom')})", inline=False)
-    embed.add_field(name="Charisma", value=f"{character.stats['charisma']} ({character.get_modifier('charisma')})", inline=False)
+    embed.add_field(name="Strength", value=f"{character.stats['strength']} ({character.get_modifier('strength')})", inline=True)
+    embed.add_field(name="Dexterity", value=f"{character.stats['dexterity']} ({character.get_modifier('dexterity')})", inline=True)
+    embed.add_field(name="Constitution", value=f"{character.stats['constitution']} ({character.get_modifier('constitution')})", inline=True)
+    embed.add_field(name="Intelligence", value=f"{character.stats['intelligence']} ({character.get_modifier('intelligence')})", inline=True)
+    embed.add_field(name="Wisdom", value=f"{character.stats['wisdom']} ({character.get_modifier('wisdom')})", inline=True)
+    embed.add_field(name="Charisma", value=f"{character.stats['charisma']} ({character.get_modifier('charisma')})", inline=True)
+
+    embed.add_field(name="===================", value="", inline=False)
 
     # add equipment
-    embed.add_field(name="===================", value="", inline=False)
     inventory = ""
     for item in character.inventory:
         inventory += f"- {item}\n"
-    embed.add_field(name="Equipment", value=character.inventory, inline=False)
+    embed.add_field(name="Equipment", value=character.inventory, inline=True)
 
     # add spells
-    embed.add_field(name="===================", value="", inline=False)
     spells = ""
-    for spell in character.spells:
-        spells += f"- {spell}\n"
-    embed.add_field(name="Spells", value=spells, inline=False)
+    for tier in range(len(character.spells)):
+        spells += f"__Level {tier} :__\n"
+        for spell in character.spells[tier]:
+            spells += f"- {spell.name}\n"
+    embed.add_field(name="**Spells**", value=spells, inline=True)
 
     # send the embed
     await thread.send(embed = embed)

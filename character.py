@@ -4,7 +4,7 @@ import asyncio
 import discord
 
 import util
-import spell
+from spell import Spell
 
 class Character():
     def __init__(self, author: discord.Member):
@@ -140,7 +140,12 @@ class Character():
             #load spell slots
             self.spell_slots = character["spell_slots"]
             #load spells
-            self.spells = character["spells"]
+            spell_tiers = character["spells"]
+            for tier in range(len(spell_tiers)):
+                for spell_name in spell_tiers[tier]:
+                    spell = Spell()
+                    spell.load(spell_name)
+                    self.spells[tier].append(spell)
             #load level
             self.level = character["level"]
             #load xp
@@ -161,6 +166,11 @@ class Character():
         with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
             characters = json.load(f)
 
+        spell_names = [[], [], [], [], [], [], [], [], []]
+        for tier in range(len(self.spells)):
+            for spell in self.spells[tier]:
+                spell_names[tier].append(spell.name)
+
         characters[str(self.author.id)] = {
             "name": self.name,
             "age": self.age,
@@ -177,7 +187,7 @@ class Character():
 
             "inventory": self.inventory,
             "spell_slots": self.spell_slots,
-            "spells": self.spells
+            "spells": spell_names
         }
 
         with open(CHARACTER_FOLDER + 'characters.json', 'w') as f:

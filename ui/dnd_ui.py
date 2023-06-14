@@ -9,7 +9,7 @@ import spell
 from character import Character
 
 class CampaignUI(View):
-    def __init__(self, bot, thread, host: discord.Member):
+    def __init__(self, bot, thread: discord.Thread, host: discord.Member):
         super().__init__(timeout=None)
 
         self.host = host
@@ -65,7 +65,7 @@ class CampaignUI(View):
         self.characters.append(character)
 
         # invite the player to the thread
-        await self.thread.add_recipient(player)
+        await self.thread.add_user(player)
 
         # send a message in the thread to the player
         await self.thread.send(f"{player.mention}, you have joined the game ! You can now use the buttons above to get your personal UI !", delete_after=10)
@@ -89,8 +89,8 @@ class CampaignUI(View):
 
         self.characters.remove(self.get_character(player))
 
-        # invite the player to the thread
-        await self.thread.remove_recipient(player)
+        # remove the player from the thread
+        await self.thread.remove_user(player)
 
 
 

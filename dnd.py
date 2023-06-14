@@ -24,6 +24,8 @@ class Dnd(commands.Cog):
             await ctx.send("You are already registered")
             return
 
+        await ctx.send("Starting character creation !", delete_after=5, reference=ctx.message)
+
         with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
             characters = json.load(f)
 
@@ -67,6 +69,8 @@ class Dnd(commands.Cog):
         if not self.is_registered(ctx.author.id):
             await ctx.send("You are not registered", delete_after=5, reference=ctx.message)
             return
+
+        await ctx.send("Starting a new game ! Hold tight !", delete_after=5, reference=ctx.message)
 
         character = Character(ctx.author)
         character.load()
