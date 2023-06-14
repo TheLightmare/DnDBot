@@ -1,12 +1,13 @@
+import util
+from discord.ext import commands
+from ui.character_ui import *
+from character import Character
+from ui import character_ui, dnd_ui
 import json
 import discord
-import dnd_ui
-import util
 from settings import *
-from discord.ext import commands
-from discord.ui import Modal
-from dnd_ui import *
-from character import Character
+import asyncio
+from play import Play
 
 class Dnd(commands.Cog):
     def __init__(self, bot):
@@ -44,7 +45,7 @@ class Dnd(commands.Cog):
         character.load()
 
         # confirm deletion using buttons
-        deleteconfirmUI = dnd_ui.DeleteCharacterUI(ctx.author, character)
+        deleteconfirmUI = character_ui.DeleteCharacterUI(ctx.author, character)
 
         await ctx.send("Are you sure you want to delete your character?", view=deleteconfirmUI)
 
@@ -62,16 +63,32 @@ class Dnd(commands.Cog):
 
 
     @commands.command()
-    async def test_stats(self, ctx):
-        stats = await util.create_character(self.bot, ctx.channel, ctx.author.id)
+    async def play(self, ctx):
+        if not self.is_registered(ctx.author.id):
+            await ctx.send("You are not registered", delete_after=5, reference=ctx.message)
+            return
+
+        character = Character(ctx.author)
+        character.load()
+
+        # create a new discord thread
+        thread = await ctx.channel.create_thread(name="DnD", reason="DnD")
+        await thread.send(f"{ctx.author.mention} is playing DnD")
+
+        play = Play(self.bot, thread, ctx.author)
+        await play.start()
 
 
-    #command to see if a character is registered
-    def is_registered(self, user_id):
+    def get_character(self, user_id):
         with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
             characters = json.load(f)
         character = characters.get(str(user_id))
         return character
+
+    def is_registered(self, user_id):
+        with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
+            characters = json.load(f)
+        return str(user_id) in characters
 
 
 async def setup(bot):

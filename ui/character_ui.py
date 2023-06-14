@@ -51,6 +51,8 @@ def load_classes() -> list:
     return options
 
 
+
+
 async def update_spells_ui(message, character):
     # get embed
     embed = message.embeds[0]
