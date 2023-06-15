@@ -1,3 +1,73 @@
 {
 
+  "cities": {
+    "marienburg": {
+        "name": "Marienburg",
+        "description": "Capital of the Crusader State."
+        },
+    "altdorf": {
+        "name": "Altdorf",
+        "description": "Capital of the Empire."
+        },
+    "middenheim": {
+        "name": "Middenheim",
+        "description": "Capital of the Empire."
+        },
+    "nuln": {
+        "name": "Nuln",
+        "description": "Capital of the Empire."
+        },
+    "talabheim": {
+        "name": "Talabheim",
+        "description": "Capital of the Empire."
+        },
+    "wissenland": {
+        "name": "Wissenland",
+        "description": "Capital of the Empire."
+    }
+  },
+
+  "roads": {
+    "Road of the Forest": {
+        "description": "The Road of the Forest is a major road that runs from Marienburg to Altdorf. It is the main trade route between the two cities.",
+        "distance":10,
+        "path": [
+            "marienburg",
+            "altdorf"
+        ]
+        },
+    "Road of the Skulls": {
+        "description": "The Road of the Skulls is a major road that runs from Marienburg to Middenheim. It is the main trade route between the two cities.",
+        "distance":10,
+        "path": [
+            "marienburg",
+            "middenheim"
+        ]
+        },
+    "Road of the Damned": {
+        "description": "The Road of the Damned is a major road that runs from Marienburg to Nuln. It is the main trade route between the two cities.",
+        "distance":10,
+        "path": [
+            "marienburg",
+            "nuln"
+        ]
+        },
+    "Road of the Dead": {
+        "description": "The Road of the Dead is a major road that runs from Marienburg to Talabheim. It is the main trade route between the two cities.",
+        "distance":10,
+        "path": [
+            "marienburg",
+            "talabheim"
+        ]
+        },
+    "Path of the Exile": {
+        "description": "The Path of the Exile is a major road that runs from Marienburg to Wissenland. It is the main trade route between the two cities.",
+        "distance":10,
+        "path": [
+            "talabheim",
+            "wissenland"
+        ]
+        }
+    }
 }
+

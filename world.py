@@ -8,6 +8,7 @@ from graph import *
 class City(Node):
     def __init__(self, name):
         super().__init__(name)
+        self.description = ""
         self.npcs = []
         self.buildings = []
         self.players = []
@@ -40,25 +41,53 @@ class World(Graph):
     def __init__(self):
         super().__init__()
         self.load()
+        self.starting_location = self.get_node("Marienburg")
 
-    # save the world to a json file, in adjacency list format
+    # save the world to a json file
     def save(self):
-        with open(CONTENT_FOLDER + "world/" + "world.json", 'w') as f:
-            json.dump(self.adjacency_list(), f)
+        world = {}
+        world["cities"] = []
+        world["roads"] = []
+
+        for node in self.nodes:
+            if isinstance(node, City):
+                city = {}
+                city["name"] = node.name
+                city["description"] = node.description
+                world["cities"].append(city)
+
+        for edge in self.edges:
+            if isinstance(edge, Road):
+                road = {}
+                road["name"] = edge.name
+                road["path"] = [edge.node1, edge.node2]
+                road["distance"] = edge.distance
+                world["roads"].append(road)
+
+        with open(CONTENT_FOLDER + "map/" + "world_map.json", 'w') as f:
+            json.dump(world, f, indent=4)
+
+
 
     # load the world from a json file, in adjacency list format
     def load(self):
-        with open(CONTENT_FOLDER + "world/" + "world.json", 'r') as f:
-            adjacency_list = json.load(f)
-        for node in adjacency_list:
-            self.add_node(City(node))
-        for node in adjacency_list:
-            for neighbor in adjacency_list[node]:
-                self.add_edge(Road(node + "-" + neighbor, node, neighbor))
+        with open(CONTENT_FOLDER + "map/" + "world_map.json", 'r') as f:
+            world = json.load(f)
 
-    # return the world as an adjacency list
-    def adjacency_list(self):
-        adjacency_list = {}
-        for node in self.nodes:
-            adjacency_list[node.name] = node.neighbors
-        return adjacency_list
+        cities = world["cities"]
+        roads = world["roads"]
+
+        for city_json in cities:
+            city = City(cities[city_json]["name"])
+            city.description = cities[city_json]["description"]
+
+            self.add_node(city)
+
+
+        for road_json in roads:
+            road = Road(road_json, roads[road_json]["path"][0], roads[road_json]["path"][1])
+            road.set_distance(roads[road_json]["distance"])
+
+            self.add_edge(road)
+
+

@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import json
 from settings import *
 import ui.dnd_ui
@@ -20,6 +20,7 @@ class Play():
         common_embed.add_field(name="Players", value=" ".join([player.mention for player in self.players]), inline=False)
 
         # send the embed
-        await self.thread.send(embed=common_embed, view=ui.dnd_ui.CampaignUI(self.bot, self.thread, self.host))
+        await self.thread.send(embed=common_embed, view=ui.dnd_ui.LobbyUI(self.bot, self.thread, self.host))
 
+    # background tasks
 

@@ -19,6 +19,15 @@ class Character():
         self.xp = 0
         self.unspent_points = 10
 
+        # HP = Hit Points
+        self.max_hp = 10
+        self.current_hp = 10
+
+        # current location, you start nowhere because you are a loser
+        self.current_location = None
+
+        # AC = Armor Class
+        self.armor_class = 10
 
         self.stats = {
             "strength": 10,
@@ -158,6 +167,18 @@ class Character():
             self.name = character["name"]
             #load age
             self.age = character["age"]
+            #load proficiency bonus
+            self.proficiency_bonus = character["proficiency_bonus"]
+            #load proficiencies
+            self.proficiencies = character["proficiencies"]
+            #load max hp
+            self.max_hp = character["max_hp"]
+            #load current hp
+            self.current_hp = character["current_hp"]
+            #load armor class
+            self.armor_class = character["armor_class"]
+            #load current location
+            self.current_location = character["current_location"]
             return True
 
         return False
@@ -177,9 +198,18 @@ class Character():
             "race": self.race,
             "class": self.job,
 
+            "current_location": self.current_location,
+
             "level": self.level,
             "xp": self.xp,
             "unspent_points": self.unspent_points,
+
+            "max_hp": self.max_hp,
+            "current_hp": self.current_hp,
+            "armor_class": self.armor_class,
+
+            "proficiencies": self.proficiencies,
+            "proficiency_bonus": self.proficiency_bonus,
 
             "stats": self.stats,
             "stat_modifiers": self.stat_modifiers,
