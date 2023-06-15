@@ -19,6 +19,8 @@ class Character():
         self.xp = 0
         self.unspent_points = 10
 
+        self.gold = 10
+
         # HP = Hit Points
         self.max_hp = 10
         self.current_hp = 10
@@ -161,6 +163,8 @@ class Character():
             self.xp = character["xp"]
             #load unspent points
             self.unspent_points = character["unspent_points"]
+            #load gold
+            self.gold = character["gold"]
             #load features
             self.features = character["features"]
             #load name
@@ -203,6 +207,7 @@ class Character():
             "level": self.level,
             "xp": self.xp,
             "unspent_points": self.unspent_points,
+            "gold": self.gold,
 
             "max_hp": self.max_hp,
             "current_hp": self.current_hp,
