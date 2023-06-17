@@ -9,16 +9,16 @@
     "gold": 1000,
 
     "dialogue": [
-      "Hello, I am Gandulf.",
-      "I am a wizard.",
-      "I can help you on your quest."
+      "Hello, I am Gandulf the wizard !",
+      "I am too lazy to introduce lore and shit...",
+      "You better move your ass and find by yourself"
     ],
-    "default_dialogue": "Hello, I am Gandulf.",
+    "default_dialogue": "Bruh, still here ?",
 
     "quest": null,
 
     "inventory": [
-      "potion"
+      "end_of_everything"
     ],
     "spells": [
       "Fire Bolt"

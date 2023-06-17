@@ -65,6 +65,14 @@ class NPC():
             self.current_line += 1
             return text
 
+    def get_available_actions(self):
+        actions = ["steal"]
+        if self.quest is not None:
+            actions.append("demand_quest")
+        if self.is_merchant:
+            actions.append("demand_trade")
+        return actions
+
     def give_quest(self):
         if self.quest is None:
             return "I have no quest for you."

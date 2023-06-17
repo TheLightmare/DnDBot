@@ -62,6 +62,7 @@ class Character():
 
         self.features = []
 
+        # TODO : rework inventory system with dicts (to keep track of item stacks)
         self.inventory = []
 
         self.available_spells = []
@@ -107,7 +108,7 @@ class Character():
                 self.available_spells.append(spell)
 
     # basically a warcrime but it works
-    # you must increase the level before applying the level up
+    # you must increase the level before applying this function
     def apply_level_up(self):
         with open(CONTENT_FOLDER + 'classes/' + 'classes.json', 'r') as f:
             classes = json.load(f)
@@ -118,6 +119,7 @@ class Character():
         self.spell_slots = levelup_pattern["spell_slots"]
 
         for feature in features:
+            # ability score improvements are managed differently
             if feature != "Ability Score Improvement":
                 self.features.append(feature)
             else :
@@ -165,6 +167,7 @@ class Character():
         return None
 
 
+    # json loading terribleness
     def load(self):
         with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
             characters = json.load(f)

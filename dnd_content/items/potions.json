@@ -1,0 +1,13 @@
+{
+  "health_potion": {
+    "name": "Health Potion",
+    "description": "Use anytime to restore some health",
+
+    "properties": {
+      "usable_on": [
+        "all_entities"
+      ]
+    }
+  }
+
+}

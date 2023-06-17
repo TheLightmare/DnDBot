@@ -1,3 +1,6 @@
+import random
+
+import discord
 from discord.ui import Button, View, Select, UserSelect
 from discord.components import SelectOption
 from misc_utils import *
@@ -323,6 +326,14 @@ class PlayerUI(View):
         select_npc = Select(placeholder="Select an NPC to talk to", options=npc_options, min_values=1, max_values=1)
         select_npc.callback = self.talk_to_npc
 
+        action_list = [SelectOption(
+            label="No NPC",
+            value="Approach a NPC first",
+        )]
+        self.select_action = Select(placeholder="Choose action", options=action_list, min_values=1, max_values=2, disabled=True)
+        self.select_action.callback = self.npc_actions
+
+
         # all of this crap is for the spell selection
         spells_list = self.character.get_spells_dict()
         spell_options = []
@@ -337,6 +348,7 @@ class PlayerUI(View):
         self.add_item(move_button)
         self.add_item(talk_button)
         self.add_item(select_npc)
+        self.add_item(self.select_action)
         self.add_item(spell_select)
 
     def add_to_action_log(self, message, color_ansi = ""):
@@ -355,6 +367,21 @@ class PlayerUI(View):
             log += message + "\n"
         return log + "```"
 
+    def npc_actions(self, interaction: discord.Interaction):
+        npc = self.talking_to
+        action = interaction.data["values"][0]
+
+        if action == "steal":
+            if self.d20.ability_check(self.character, "stealth"):
+                self.add_to_action_log(f"<You manage to steal {random.randint(1, npc.gold)}>")
+            else:
+                self.add_to_action_log(f"<You got caught, but nothing happens>")
+            self.display_action_log()
+        elif action == "demand_quest":
+            pass
+        elif action == "demand_trade":
+            pass
+
     async def move(self, interaction: discord.Interaction):
         await interaction.response.defer()
 
@@ -366,7 +393,12 @@ class PlayerUI(View):
         # get the npc
         npc = self.character.current_building.get_npc(interaction.data["values"][0])
 
+        # set the npc you interact with
         self.talking_to = npc
+
+        # activate the action selection
+        self.select_action.disabled = False #TODO : check if that works
+
 
         # modify the embed
         message = INTERACTION_PRIVATE_MESSAGES[self.player]
