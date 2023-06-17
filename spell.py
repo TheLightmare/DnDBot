@@ -11,6 +11,11 @@ class Spell():
         self.level = None
         self.description = None
 
+    def cast(self, caster, target = None):
+        if target is None:
+            return "You cast " + self.name + "!"
+        return "You cast " + self.name + " on " + target.name + "! Die !"
+
     def load(self, name):
         with open(CONTENT_FOLDER + "spells/" + "spells.json", 'r') as f:
             spells = json.load(f)

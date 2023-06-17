@@ -229,7 +229,7 @@ class CampaignUI(View):
         character = self.get_character(interaction.user)
         embed.add_field(name="Character", value=f"**Name:** {character.name}\n**Age:** {character.age}\n**Gold:** {character.gold}", inline=False)
         embed.add_field(name="CURRENT LOCATION", value=f"__{character.current_building.name}__ : {character.current_building.description}", inline=True)
-        embed.add_field(name="PRESENT NPCS", value="", inline=True)
+        embed.add_field(name="PRESENT NPCs", value="", inline=True)
         embed.add_field(name="=========] ACTION LOG [=========", value="", inline=False)
 
         # send the embed
@@ -271,7 +271,7 @@ async def update_personal_embed(message, character: Character):
     for npc in npcs:
         npc_string += f"- {npc.name} : {npc.description}\n"
     embed.set_field_at(2,
-                       name="PRESENT NPCS",
+                       name="PRESENT NPCs",
                        value=npc_string,
                        inline=True)
 
@@ -343,15 +343,18 @@ class PlayerUI(View):
         self.add_item(select_npc)
         self.add_item(spell_select)
 
-    def add_to_action_log(self, message):
-        self.action_log.append(message)
+    def add_to_action_log(self, message, color_ansi = ""):
+        if color_ansi == "":
+            self.action_log.append(message)
+        else:
+            self.action_log.append(color_ansi + message + "\u001b[0m")
 
         if len(self.action_log) >= 6:
             self.action_log.pop(0)
 
     def display_action_log(self):
         # display the action log in a code block
-        log = "```"
+        log = "```ansi\n"
         for message in self.action_log:
             log += message + "\n"
         return log + "```"
@@ -373,13 +376,28 @@ class PlayerUI(View):
         message = INTERACTION_PRIVATE_MESSAGES[self.player]
         embed = message.embeds[0]
 
-        self.add_to_action_log(f"<You approach {npc.name}, and start a conversation...>")
+        self.add_to_action_log(f"<You approach {npc.name}, and start a conversation...>\u001b[0;0m")
         embed.set_field_at(3, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
         await message.edit(embed=embed)
         await interaction.response.defer()
 
 
     async def cast_spell(self, interaction: discord.Interaction):
+        # get the spell
+        spell = self.character.get_spell(interaction.data["values"][0])
+
+        # get the message
+        message = INTERACTION_PRIVATE_MESSAGES[self.player]
+        embed = message.embeds[0]
+
+        # get the spell result
+        spell_result = spell.cast(self.character)
+        self.add_to_action_log(f'<{spell_result}>')
+        embed.set_field_at(3, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
+
+        # modify the embed
+        await message.edit(embed=embed)
+
         await interaction.response.defer()
 
 
@@ -398,7 +416,7 @@ class PlayerUI(View):
         # get the dialogue
         dialogue = npc.talk()
         if dialogue == None:
-            dialogue = "You have exhausted this NPC's dialogue"
+            dialogue = "(You have exhausted this NPC's dialogue)"
             self.add_to_action_log(f'{dialogue}')
             self.talking_to = None
         else :

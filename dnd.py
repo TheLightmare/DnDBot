@@ -65,7 +65,7 @@ class Dnd(commands.Cog):
 
 
     @commands.command()
-    async def play(self, ctx):
+    async def host(self, ctx):
         if not self.is_registered(ctx.author.id):
             await ctx.send("You are not registered", delete_after=5, reference=ctx.message)
             return
@@ -76,7 +76,7 @@ class Dnd(commands.Cog):
         character.load()
 
         # create a new discord thread
-        thread = await ctx.channel.create_thread(name="DnD", reason="DnD")
+        thread = await ctx.channel.create_thread(name=f"{ctx.author}'s Room", reason="DnD")
         await thread.send(f"{ctx.author.mention} is playing DnD")
 
         play = Play(self.bot, thread, ctx.author)

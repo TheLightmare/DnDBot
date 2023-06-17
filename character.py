@@ -132,6 +132,14 @@ class Character():
         return modifier
 
 
+    def get_spell(self, spell_name):
+        for tier in self.spells:
+            for spell in tier:
+                if spell.name == spell_name:
+                    return spell
+        return None
+
+
     def load(self):
         with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
             characters = json.load(f)
