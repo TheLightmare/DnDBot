@@ -1,0 +1,27 @@
+{
+  "gandulf": {
+    "name": "Gandulf",
+    "description": "A strange wizard.",
+    "location": "marienburg",
+    "building": "city_entrance",
+    "image": "gandulf.png",
+    "is_merchant": false,
+    "gold": 1000,
+
+    "dialogue": [
+      "Hello, I am Gandulf.",
+      "I am a wizard.",
+      "I can help you on your quest."
+    ],
+    "default_dialogue": "Hello, I am Gandulf.",
+
+    "quest": null,
+
+    "inventory": [
+      "potion"
+    ],
+    "spells": [
+      "Fire Bolt"
+    ]
+  }
+}

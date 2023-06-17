@@ -26,3 +26,10 @@ class Spell():
         spell.description = self.description
         return spell
 
+    def as_dict(self):
+        return {
+            "name": self.name,
+            "level": self.level,
+            "description": self.description
+        }
+

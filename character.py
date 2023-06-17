@@ -27,6 +27,7 @@ class Character():
 
         # current location, you start nowhere because you are a loser
         self.current_location = None
+        self.current_building = None
 
         # AC = Armor Class
         self.armor_class = 10
@@ -183,6 +184,8 @@ class Character():
             self.armor_class = character["armor_class"]
             #load current location
             self.current_location = character["current_location"]
+            #load current building
+            self.current_building = character["current_building"]
             return True
 
         return False
@@ -203,6 +206,7 @@ class Character():
             "class": self.job,
 
             "current_location": self.current_location,
+            "current_building": self.current_building,
 
             "level": self.level,
             "xp": self.xp,
@@ -236,3 +240,10 @@ class Character():
 
         with open(CHARACTER_FOLDER + 'characters.json', 'w') as f:
             json.dump(characters, f, indent=4)
+
+    def get_spells_dict(self):
+        spells = []
+        for tier in range(len(self.spells)):
+            for spell in self.spells[tier]:
+                spells.append(spell.as_dict())
+        return spells

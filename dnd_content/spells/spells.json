@@ -1,4 +1,14 @@
 {
+  "Eldritch Blast": {
+    "name": "Eldritch Blast",
+    "description": "",
+    "level": 0,
+
+    "available": [
+        "Warlock"
+    ]
+  },
+
   "Acid Splash": {
     "name": "Acid Splash",
     "description": "",

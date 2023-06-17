@@ -8,7 +8,10 @@ from discord.ext import commands, tasks
 from settings import *
 import spell
 from character import Character
-from world import World
+from world import World, City
+
+
+INTERACTION_PRIVATE_MESSAGES = {}
 
 class LobbyUI(View):
     def __init__(self, bot, thread: discord.Thread, host: discord.Member, tasks: list = []):
@@ -81,7 +84,7 @@ class LobbyUI(View):
         await self.thread.add_user(player)
 
         # send a message in the thread to the player
-        await self.thread.send(f"{player.mention}, you have joined the game ! You can now use the buttons above to get your personal UI !", delete_after=10)
+        await self.thread.send(f"{player.mention}, you have joined the game ! Wait for the host to send the Campaign UI, then click on the button to get your own interface !", delete_after=10)
 
         # update the embed
         embed = interaction.message.embeds[0]
@@ -127,7 +130,9 @@ class LobbyUI(View):
 
         # send the embed
         message = await self.thread.send(embed=embed, view=CampaignUI(self.bot, self.thread, self.players, self.host, self.characters))
-        self.tasks.append(update_embed.start(message, self.get_character(self.host)))
+
+        # start the background tasks
+        self.tasks.append(update_campaign_embed.start(message, self.get_character(self.host)))
 
         await interaction.response.defer()
 
@@ -183,14 +188,24 @@ class CampaignUI(View):
         self.characters = characters
         self.host_character = self.get_character(self.host)
 
+        # load the world
         self.world = World()
         self.world.load()
+
+        # load the quests
+        self.quests = []
+
+        # background tasks
+        self.tasks = []
+
 
         # set the current location for each character
         if self.host_character.current_location is None:
             self.host_character.current_location = self.world.starting_location
+            self.host_character.current_building = self.world.starting_location.buildings[0]
         for character in self.characters:
             character.current_location = self.world.starting_location
+            character.current_building = self.world.starting_location.buildings[0]
 
         self.players_with_ui = {}
         get_personal_ui = Button(
@@ -212,12 +227,20 @@ class CampaignUI(View):
         embed = discord.Embed(title=f"{interaction.user} Personal UI", description="This is your personal interface", color=0x00ff00)
         embed.set_author(name=interaction.user.name, icon_url=interaction.user.avatar.url)
         character = self.get_character(interaction.user)
-        embed.add_field(name="Character", value=f"**Name:** {character.name}\n**Age:** {character.age}", inline=False)
+        embed.add_field(name="Character", value=f"**Name:** {character.name}\n**Age:** {character.age}\n**Gold:** {character.gold}", inline=False)
+        embed.add_field(name="CURRENT LOCATION", value=f"__{character.current_building.name}__ : {character.current_building.description}", inline=True)
+        embed.add_field(name="PRESENT NPCS", value="", inline=True)
+        embed.add_field(name="=========] ACTION LOG [=========", value="", inline=False)
 
         # send the embed
-        await interaction.response.send_message(embed=embed, view=PlayerUI(interaction.user, character), ephemeral=True)
+        await interaction.response.send_message(embed=embed, view=PlayerUI(interaction.user, character, self.thread), ephemeral=True)
         # add the player to the players with ui
         self.players_with_ui[interaction.user] = True
+
+        # start the background tasks
+        message = await interaction.original_response()
+        INTERACTION_PRIVATE_MESSAGES[interaction.user] = message
+        self.tasks.append(update_personal_embed.start(message, self.get_character(interaction.user)))
 
     def get_character(self, player):
         for character in self.characters:
@@ -225,13 +248,36 @@ class CampaignUI(View):
                 return character
 
 @tasks.loop(seconds=2)
-async def update_embed(message, host_character: Character):
+async def update_campaign_embed(message, host_character: Character):
     # update the embed
     embed = message.embeds[0]
-    embed.set_field_at(0, name="CURRENT LOCATION", value=host_character.current_location.name, inline=True)
+    embed.set_field_at(0, name="CURRENT LOCATION", value=f"__{host_character.current_location.name}__ : {host_character.current_location.description}", inline=True)
+
 
     # modify the message
     await message.edit(embed=embed)
+
+@tasks.loop(seconds=2)
+async def update_personal_embed(message, character: Character):
+    # update the embed
+    embed = message.embeds[0]
+    embed.set_field_at(1,
+                    name="CURRENT LOCATION",
+                    value=f"__{character.current_building.name}__ : {character.current_building.description}",
+                    inline=True)
+
+    npcs = character.current_building.get_present_npcs()
+    npc_string = ""
+    for npc in npcs:
+        npc_string += f"- {npc.name} : {npc.description}\n"
+    embed.set_field_at(2,
+                       name="PRESENT NPCS",
+                       value=npc_string,
+                       inline=True)
+
+    # modify the message
+    await message.edit(embed=embed)
+
 
 @tasks.loop(seconds=1)
 async def player_chat(thread: discord.Thread, players: list):
@@ -245,11 +291,121 @@ async def player_chat(thread: discord.Thread, players: list):
                 await msg.delete()
 
 class PlayerUI(View):
-    def __init__(self, player, character: Character):
+    def __init__(self, player, character: Character, thread: discord.Thread):
         super().__init__(timeout=None)
 
         self.player = player
         self.character = character
+        self.thread = thread
+
+        # npc the player is talking to
+        self.talking_to = None
+
+        self.action_log = []
+
+        # buttons
+        move_button = Button(
+            label="Move",
+            style=discord.ButtonStyle.blurple,
+        )
+        move_button.callback = self.move
+
+        talk_button = Button(
+            label="Talk/Continue Talking",
+            style=discord.ButtonStyle.blurple,
+        )
+        talk_button.callback = self.talk
+
+        # select menus
+
+        npc_list = self.character.current_building.get_present_npcs()
+        npc_options = []
+        for npc in npc_list:
+            npc_options.append(SelectOption(label=npc.name, value=npc.id, description=npc.description))
+        if npc_options == []:
+            npc_options.append(SelectOption(label="No NPCs", value="No NPCs", description="There are no NPCs here"))
+        select_npc = Select(placeholder="Select an NPC to talk to", options=npc_options, min_values=1, max_values=1)
+        select_npc.callback = self.talk_to_npc
+
+        # all of this crap is for the spell selection
+        spells_list = self.character.get_spells_dict()
+        spell_options = []
+        for spell in spells_list:
+            spell_options.append(SelectOption(label=spell["name"], value=spell["name"], description=spell["description"]))
+        if spell_options == []:
+            spell_options.append(SelectOption(label="No Spells", value="No Spells", description="You don't have any spells"))
+        spell_select = Select(placeholder="Select a Spell", options=spell_options, min_values=1, max_values=1)
+        spell_select.callback = self.cast_spell
+
+        # add the buttons and select menus
+        self.add_item(move_button)
+        self.add_item(talk_button)
+        self.add_item(select_npc)
+        self.add_item(spell_select)
+
+    def add_to_action_log(self, message):
+        self.action_log.append(message)
+
+        if len(self.action_log) >= 6:
+            self.action_log.pop(0)
+
+    def display_action_log(self):
+        # display the action log in a code block
+        log = "```"
+        for message in self.action_log:
+            log += message + "\n"
+        return log + "```"
+
+    async def move(self, interaction: discord.Interaction):
+        await interaction.response.defer()
+
+    async def talk_to_npc(self, interaction: discord.Interaction):
+        if self.talking_to is not None:
+            await interaction.response.send_message("You are already talking to an NPC, exhaust current dialogue first", ephemeral=True, delete_after=5)
+            return
+
+        # get the npc
+        npc = self.character.current_building.get_npc(interaction.data["values"][0])
+
+        self.talking_to = npc
+
+        # modify the embed
+        message = INTERACTION_PRIVATE_MESSAGES[self.player]
+        embed = message.embeds[0]
+
+        self.add_to_action_log(f"<You approach {npc.name}, and start a conversation...>")
+        embed.set_field_at(3, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
+        await message.edit(embed=embed)
+        await interaction.response.defer()
 
 
+    async def cast_spell(self, interaction: discord.Interaction):
+        await interaction.response.defer()
+
+
+    async def talk(self, interaction: discord.Interaction):
+        if self.talking_to is None:
+            await interaction.response.send_message("You are not talking to an NPC", ephemeral=True, delete_after=5)
+            return
+
+        # get the npc
+        npc = self.talking_to
+
+        # get the message
+        message = INTERACTION_PRIVATE_MESSAGES[self.player]
+        embed = message.embeds[0]
+
+        # get the dialogue
+        dialogue = npc.talk()
+        if dialogue == None:
+            dialogue = "You have exhausted this NPC's dialogue"
+            self.add_to_action_log(f'{dialogue}')
+            self.talking_to = None
+        else :
+            self.add_to_action_log(f'{npc.name} : "{dialogue}"')
+
+        # modify the embed
+        embed.set_field_at(3, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
+        await message.edit(embed=embed)
+        await interaction.response.defer()
 

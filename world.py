@@ -4,6 +4,8 @@ import json
 from settings import *
 import util
 from graph import *
+from building import *
+from npc import *
 
 class City(Node):
     def __init__(self, name):
@@ -12,10 +14,15 @@ class City(Node):
         self.npcs = []
         self.buildings = []
         self.players = []
-        self.quests = []
 
     def add_npc(self, npc):
         self.npcs.append(npc)
+        # add the npc to the building he is in
+        for building in self.buildings:
+            if building.id == npc.building:
+                building.add_npc(npc)
+                break
+
 
     def add_building(self, building):
         self.buildings.append(building)
@@ -23,8 +30,7 @@ class City(Node):
     def add_player(self, player):
         self.players.append(player)
 
-    def add_quest(self, quest):
-        self.quests.append(quest)
+
 
 class Road(Edge):
     def __init__(self, name, node1, node2):
@@ -42,6 +48,10 @@ class World(Graph):
         super().__init__()
         self.load()
         self.starting_location = self.get_node("Marienburg")
+
+        # time goes from 0 to 24
+        self.time = 12
+        self.weather = "sunny"
 
     # save the world to a json file
     def save(self):
@@ -64,14 +74,14 @@ class World(Graph):
                 road["distance"] = edge.distance
                 world["roads"].append(road)
 
-        with open(CONTENT_FOLDER + "map/" + "world_map.json", 'w') as f:
+        with open(CONTENT_FOLDER + "world/" + "world_map.json", 'w') as f:
             json.dump(world, f, indent=4)
 
 
 
     # load the world from a json file, in adjacency list format
     def load(self):
-        with open(CONTENT_FOLDER + "map/" + "world_map.json", 'r') as f:
+        with open(CONTENT_FOLDER + "world/" + "world_map.json", 'r') as f:
             world = json.load(f)
 
         cities = world["cities"]
@@ -81,6 +91,18 @@ class World(Graph):
             city = City(cities[city_json]["name"])
             city.description = cities[city_json]["description"]
 
+            for building_id in cities[city_json]["buildings"]:
+                if building_id == "city_entrance":
+                    city.buildings.append(CityEntrance())
+                elif building_id == "tavern":
+                    city.buildings.append(Tavern())
+
+            for npc_id in cities[city_json]["npcs"]:
+                npc = NPC()
+                npc.load(npc_id)
+                city.add_npc(npc)
+
+
             self.add_node(city)
 
 
@@ -89,5 +111,7 @@ class World(Graph):
             road.set_distance(roads[road_json]["distance"])
 
             self.add_edge(road)
+
+
 
 

@@ -3,27 +3,64 @@
   "cities": {
     "marienburg": {
         "name": "Marienburg",
-        "description": "Capital of the Crusader State."
+        "description": "Capital of the Crusader State.",
+        "buildings": [
+          "city_entrance",
+          "tavern"
+        ],
+        "npcs": [
+          "gandulf"
+        ]
         },
     "altdorf": {
         "name": "Altdorf",
-        "description": "Capital of the Empire."
+        "description": "Capital of the Empire.",
+      "buildings": [
+          "city_entrance",
+          "tavern"
+        ],
+        "npcs": [
+        ]
         },
     "middenheim": {
         "name": "Middenheim",
-        "description": "Capital of the Empire."
+        "description": "Capital of the Empire.",
+        "buildings": [
+          "city_entrance",
+          "tavern"
+        ],
+        "npcs": [
+        ]
         },
     "nuln": {
         "name": "Nuln",
-        "description": "Capital of the Empire."
+        "description": "Capital of the Empire.",
+        "buildings": [
+          "city_entrance",
+          "tavern"
+        ],
+        "npcs": [
+        ]
         },
     "talabheim": {
         "name": "Talabheim",
-        "description": "Capital of the Empire."
+        "description": "Capital of the Empire.",
+        "buildings": [
+          "city_entrance",
+          "tavern"
+        ],
+        "npcs": [
+        ]
         },
     "wissenland": {
         "name": "Wissenland",
-        "description": "Capital of the Empire."
+        "description": "Capital of the Empire.",
+        "buildings": [
+          "city_entrance",
+          "tavern"
+        ],
+        "npcs": [
+        ]
     }
   },
 

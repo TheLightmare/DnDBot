@@ -1,0 +1,9 @@
+{
+  "find_mushrooms": {
+    "type": "find",
+    "name": "Find Mushrooms",
+    "description": "Find me mushrooms ye stoopid",
+    "reward": "1",
+    "difficulty": "1"
+  }
+}
