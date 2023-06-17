@@ -1,10 +1,5 @@
-import discord
-import asyncio
-import json
-from settings import *
-import util
-from graph import *
-from building import *
+from util.graph import *
+from util.building import *
 from npc import *
 
 class City(Node):

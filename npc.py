@@ -1,6 +1,6 @@
 import json
-from settings import *
-from quest import Quest
+from util.settings import *
+
 
 # abstract class for all NPCs
 class NPC():

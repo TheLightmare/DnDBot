@@ -1,5 +1,4 @@
 import json
-from settings import *
 from npc import *
 from npc import NPC
 

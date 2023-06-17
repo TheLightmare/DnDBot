@@ -1,8 +1,5 @@
 import json
-from settings import *
-import asyncio
-import discord
-import util
+from util.settings import *
 
 
 class Spell():

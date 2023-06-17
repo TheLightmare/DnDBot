@@ -1,5 +1,5 @@
 import json
-from settings import *
+from util.settings import *
 
 # generic quest class
 class Quest():

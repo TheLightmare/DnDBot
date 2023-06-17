@@ -25,6 +25,8 @@
     "description": "",
     "level": 0,
 
+    "damage_type": "fire",
+
     "available": [
         "Sorcerer",
         "Wizard"

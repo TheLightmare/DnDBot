@@ -3,10 +3,8 @@ import discord
 from discord.ext import tasks
 import json
 from character import Character
-from settings import *
-from ui import character_ui, dnd_ui
-
-
+from util.settings import *
+from ui import character_ui
 
 
 # distribute character stats using an embed and buttons

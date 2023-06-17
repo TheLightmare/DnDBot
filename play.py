@@ -1,7 +1,4 @@
 import discord
-from discord.ext import commands, tasks
-import json
-from settings import *
 import ui.dnd_ui
 
 class Play():

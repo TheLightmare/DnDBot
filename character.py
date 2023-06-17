@@ -1,6 +1,5 @@
 import json
-from settings import *
-import asyncio
+from util.settings import *
 import discord
 
 import util
@@ -130,6 +129,32 @@ class Character():
         for source in self.stat_modifiers[stat]:
             modifier += self.stat_modifiers[stat][source]
         return modifier
+
+
+    def get_roll_bonus(self, stat):
+        total = self.get_modifier(stat) + self.stats[stat]
+        # returns the roll bonus, not the modifier
+        if total >= 18:
+            return 4
+        elif total >= 16:
+            return 3
+        elif total >= 14:
+            return 2
+        elif total >= 12:
+            return 1
+        elif total >= 10:
+            return 0
+        elif total >= 8:
+            return -1
+        elif total >= 6:
+            return -2
+        elif total >= 4:
+            return -3
+        elif total >= 2:
+            return -4
+        else:
+            return -5
+
 
 
     def get_spell(self, spell_name):

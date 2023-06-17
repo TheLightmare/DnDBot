@@ -1,10 +1,6 @@
-import json
-import asyncio
-import discord
-from settings import *
-from discord.ui import Modal, Button, View, Select, TextInput
+from discord.ui import Modal, View, TextInput
 from discord.components import SelectOption
-from settings import *
+from misc_utils import *
 import spell
 
 # preloads stuff into SelectOptions

@@ -1,15 +1,9 @@
-import json
-import asyncio
-import discord
-from settings import *
-from discord.ui import Modal, Button, View, Select, TextInput, UserSelect
+from discord.ui import Button, View, Select, UserSelect
 from discord.components import SelectOption
-from discord.ext import commands, tasks
-from settings import *
-import spell
+from misc_utils import *
 from character import Character
-from world import World, City
-
+from world import World
+from util.dice import Dice
 
 INTERACTION_PRIVATE_MESSAGES = {}
 
@@ -298,6 +292,8 @@ class PlayerUI(View):
         self.character = character
         self.thread = thread
 
+        self.d20 = Dice(20)
+
         # npc the player is talking to
         self.talking_to = None
 
@@ -385,6 +381,9 @@ class PlayerUI(View):
     async def cast_spell(self, interaction: discord.Interaction):
         # get the spell
         spell = self.character.get_spell(interaction.data["values"][0])
+
+        # ability check
+        #TODO : add ability check
 
         # get the message
         message = INTERACTION_PRIVATE_MESSAGES[self.player]

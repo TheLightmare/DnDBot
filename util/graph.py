@@ -1,4 +1,3 @@
-from settings import *
 
 # abstract Node class
 class Node():

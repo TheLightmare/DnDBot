@@ -1,12 +1,10 @@
 import util
 from discord.ext import commands
-from ui.character_ui import *
 from character import Character
-from ui import character_ui, dnd_ui
+from ui import character_ui
 import json
 import discord
-from settings import *
-import asyncio
+from util.settings import *
 from play import Play
 
 class Dnd(commands.Cog):
