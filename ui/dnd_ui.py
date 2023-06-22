@@ -99,6 +99,11 @@ class LobbyUI(View):
         # make player into a discord.Member
         player = await self.bot.fetch_user(player)
 
+        # check if the player is self
+        if player == interaction.user:
+            await interaction.response.send_message("You cannot remove yourself ! Use the 'Leave' button for that !", ephemeral=True, delete_after=5)
+            return
+
         # check if the player is already not in the game
         if player not in self.players:
             await interaction.response.send_message(f"{player.name} is not in the game", ephemeral=True, delete_after=5)
@@ -126,10 +131,12 @@ class LobbyUI(View):
         embed.add_field(name="MAP OF SURROUNDINGS", value="", inline=False)
 
         # send the embed
-        message = await self.thread.send(embed=embed, view=CampaignUI(self.bot, self.thread, self.players, self.host, self.characters))
+        self.world = World()
+        self.world.load()
+        message = await self.thread.send(embed=embed, view=CampaignUI(self.bot, self.thread, self.players, self.host, self.characters, self.world))
 
         # start the background tasks
-        self.tasks.append(update_campaign_embed.start(message, self.get_character(self.host)))
+        self.tasks.append(update_campaign_embed.start(message, self.get_character(self.host), world=self.world))
 
         await interaction.response.defer()
 
@@ -176,7 +183,7 @@ class LobbyUI(View):
 
 #UI for the campaign
 class CampaignUI(View):
-    def __init__(self, bot, thread: discord.Thread, party: list, host: discord.Member, characters: list):
+    def __init__(self, bot, thread: discord.Thread, party: list, host: discord.Member, characters: list, world: World):
         super().__init__(timeout=None)
         self.bot = bot
         self.thread = thread
@@ -186,8 +193,7 @@ class CampaignUI(View):
         self.host_character = self.get_character(self.host)
 
         # load the world
-        self.world = World()
-        self.world.load()
+        self.world = world
 
         # load the quests
         self.quests = []
@@ -245,11 +251,11 @@ class CampaignUI(View):
                 return character
 
 @tasks.loop(seconds=2)
-async def update_campaign_embed(message, host_character: Character):
+async def update_campaign_embed(message, host_character: Character, world: World):
     # update the embed
     embed = message.embeds[0]
     embed.set_field_at(0, name="CURRENT LOCATION", value=f"__{host_character.current_location.name}__ : {host_character.current_location.description}", inline=True)
-
+    embed.set_field_at(1, name="CURRENT TIME", value=f"{world.time}", inline=True)
 
     # modify the message
     await message.edit(embed=embed)
@@ -326,12 +332,14 @@ class PlayerUI(View):
         select_npc = Select(placeholder="Select an NPC to talk to", options=npc_options, min_values=1, max_values=1)
         select_npc.callback = self.talk_to_npc
 
-        action_list = [SelectOption(
-            label="No NPC",
-            value="Approach a NPC first",
-        )]
-        self.select_action = Select(placeholder="Choose action", options=action_list, min_values=1, max_values=2, disabled=True)
-        self.select_action.callback = self.npc_actions
+        action_list = [
+            SelectOption(label="Attack", value="attack", description="Physical attack against the NPC/object you are interacting with"),
+            SelectOption(label="Hide", value="hide", description="Find a place to hide"),
+            SelectOption(label="Rest", value="rest", description="Take a Short Rest"),
+            SelectOption(label="Steal", value="steal", description="Attempt to steal from the NPC/object you are interacting with")
+        ]
+        self.select_action = Select(placeholder="Choose action", options=action_list, min_values=1, max_values=1)
+        self.select_action.callback = self.do_action
 
 
         # all of this crap is for the spell selection
@@ -367,20 +375,39 @@ class PlayerUI(View):
             log += message + "\n"
         return log + "```"
 
-    def npc_actions(self, interaction: discord.Interaction):
+    async def do_action(self, interaction: discord.Interaction):
         npc = self.talking_to
         action = interaction.data["values"][0]
 
-        if action == "steal":
-            if self.d20.ability_check(self.character, "stealth"):
+        if action == "steal" and npc is not None:
+            if self.d20.ability_check(self.character, "dexterity"):
                 self.add_to_action_log(f"<You manage to steal {random.randint(1, npc.gold)}>")
             else:
                 self.add_to_action_log(f"<You got caught, but nothing happens>")
-            self.display_action_log()
         elif action == "demand_quest":
             pass
         elif action == "demand_trade":
             pass
+        # general actions
+        elif action == "attack" and npc is not None:
+            if self.d20.attack_roll(self.character, npc):
+                self.add_to_action_log(f"<You hit {npc.name} for {random.randint(1, 6)} damage>")
+            else:
+                self.add_to_action_log(f"<You miss {npc.name}>")
+        elif action == "hide":
+            if self.d20.ability_check(self.character, "stealth"):
+                self.add_to_action_log(f"<You manage to hide>")
+            else:
+                self.add_to_action_log(f"<You got caught, but nothing happens>")
+        elif action == "rest":
+            self.add_to_action_log(f"<You take a short rest>")
+
+        # update the embed
+        message = INTERACTION_PRIVATE_MESSAGES[self.player]
+        embed = message.embeds[0]
+        embed.set_field_at(3, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
+        await message.edit(embed=embed)
+        await interaction.response.defer()
 
     async def move(self, interaction: discord.Interaction):
         await interaction.response.defer()
@@ -395,10 +422,6 @@ class PlayerUI(View):
 
         # set the npc you interact with
         self.talking_to = npc
-
-        # activate the action selection
-        self.select_action.disabled = False #TODO : check if that works
-
 
         # modify the embed
         message = INTERACTION_PRIVATE_MESSAGES[self.player]

@@ -2,6 +2,7 @@
   "gandulf": {
     "name": "Gandulf",
     "description": "A strange wizard.",
+    "health": 100,
     "location": "marienburg",
     "building": "city_entrance",
     "image": "gandulf.png",

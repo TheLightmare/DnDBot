@@ -133,6 +133,20 @@ class Character():
         return modifier
 
 
+    def get_attack_stat(self):
+        if self.job == "Fighter":
+            return "strength"
+        elif self.job == "Rogue":
+            return "dexterity"
+        elif self.job == "Wizard":
+            return "intelligence"
+        elif self.job == "Cleric":
+            return "wisdom"
+        elif self.job == "Bard":
+            return "charisma"
+        else:
+            return "strength"
+
     def get_roll_bonus(self, stat):
         total = self.get_modifier(stat) + self.stats[stat]
         # returns the roll bonus, not the modifier

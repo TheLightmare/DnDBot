@@ -27,6 +27,20 @@ class Dice():
             roll = max(self.roll(), self.roll())
         elif disadvantage:
             roll = min(self.roll(), self.roll())
+        else:
+            roll = self.roll()
 
         roll += roll_bonus
         return roll >= difficulty
+
+    def attack_roll(self, character: Character, target, advantage=False, disadvantage=False):
+        attack_stat = character.get_attack_stat()
+        roll_bonus = character.get_roll_bonus(attack_stat)
+        roll = 0
+        if advantage:
+            roll = max(self.roll(), self.roll())
+        elif disadvantage:
+            roll = min(self.roll(), self.roll())
+
+        roll += roll_bonus
+        return roll >= target.get_armor_class()

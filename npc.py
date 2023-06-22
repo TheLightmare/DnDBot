@@ -9,6 +9,8 @@ class NPC():
         self.name = None
         self.description = None
 
+        self.health = 100
+
         # current location
         self.location = None
         self.building = None
@@ -42,6 +44,7 @@ class NPC():
         self.id = id
         self.name = npc["name"]
         self.description = npc["description"]
+        self.health = npc["health"]
         self.location = npc["location"]
         self.building = npc["building"]
         self.image = npc["image"]

@@ -10,6 +10,8 @@ class City(Node):
         self.buildings = []
         self.players = []
 
+
+
     def add_npc(self, npc):
         self.npcs.append(npc)
         # add the npc to the building he is in
