@@ -27,6 +27,27 @@ class City(Node):
     def add_player(self, player):
         self.players.append(player)
 
+    def remove_npc(self, npc):
+        self.npcs.remove(npc)
+        # remove the npc from the building he is in
+        for building in self.buildings:
+            if building.id == npc.building:
+                building.remove_npc(npc)
+                break
+
+    def remove_player(self, player):
+        self.players.remove(player)
+        # remove the player from the building he is in
+        for building in self.buildings:
+            if building.id == player.building:
+                building.remove_player(player)
+                break
+
+    def get_building(self, id):
+        for building in self.buildings:
+            if building.id == id:
+                return building
+        return None
 
 
 class Road(Edge):
@@ -90,9 +111,9 @@ class World(Graph):
 
             for building_id in cities[city_json]["buildings"]:
                 if building_id == "city_entrance":
-                    city.buildings.append(CityEntrance())
+                    city.buildings.append(CityEntrance(city))
                 elif building_id == "tavern":
-                    city.buildings.append(Tavern())
+                    city.buildings.append(Tavern(city))
 
             for npc_id in cities[city_json]["npcs"]:
                 npc = NPC()

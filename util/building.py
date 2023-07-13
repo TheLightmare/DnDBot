@@ -6,7 +6,8 @@ from npc import NPC
 
 # abstract class for all buildings
 class Building():
-    def __init__(self, name, id):
+    def __init__(self, city, name, id):
+        self.city = city
         self.name = name
         self.id = id
         self.description = ""
@@ -39,12 +40,12 @@ class Building():
 
 
 class CityEntrance(Building):
-    def __init__(self):
-        super().__init__("City Entrance", "city_entrance")
+    def __init__(self, city):
+        super().__init__(city, "City Entrance", "city_entrance")
         self.description = "The entrance to the city. You can see the city walls and the gate. There are guards patrolling the area."
         self.tags = ["entrance"]
 
 class Tavern(Building):
-    def __init__(self):
-        super().__init__("Tavern", "tavern")
+    def __init__(self, city):
+        super().__init__(city, "Tavern", "tavern")
         self.description = "The god forsaken tavern"

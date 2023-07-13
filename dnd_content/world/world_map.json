@@ -9,7 +9,9 @@
           "tavern"
         ],
         "npcs": [
-          "gandulf"
+          "gandulf",
+          "bartender",
+          "ramon"
         ]
         },
     "altdorf": {

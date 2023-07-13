@@ -126,6 +126,12 @@ class Character():
                 self.unspent_points += 2
 
 
+    def move_location(self, location):
+        self.current_location = location
+
+    def move_building(self, building):
+        self.current_building = building
+
     def get_modifier(self, stat):
         modifier = 0
         for source in self.stat_modifiers[stat]:

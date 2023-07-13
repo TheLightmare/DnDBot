@@ -1,7 +1,7 @@
 import random
 
 import discord
-from discord.ui import Button, View, Select, UserSelect
+from discord.ui import Button, View, Select, UserSelect, Modal, TextInput
 from discord.components import SelectOption
 from misc_utils import *
 from character import Character
@@ -236,7 +236,7 @@ class CampaignUI(View):
         embed.add_field(name="=========] ACTION LOG [=========", value="", inline=False)
 
         # send the embed
-        await interaction.response.send_message(embed=embed, view=PlayerUI(interaction.user, character, self.thread), ephemeral=True)
+        await interaction.response.send_message(embed=embed, view=PlayerUI(interaction.user, character, self.thread, self.world), ephemeral=True)
         # add the player to the players with ui
         self.players_with_ui[interaction.user] = True
 
@@ -294,12 +294,13 @@ async def player_chat(thread: discord.Thread, players: list):
                 await msg.delete()
 
 class PlayerUI(View):
-    def __init__(self, player, character: Character, thread: discord.Thread):
+    def __init__(self, player : discord.User, character: Character, thread: discord.Thread, world: World):
         super().__init__(timeout=None)
 
         self.player = player
         self.character = character
         self.thread = thread
+        self.world = world
 
         self.d20 = Dice(20)
 
@@ -309,12 +310,6 @@ class PlayerUI(View):
         self.action_log = []
 
         # buttons
-        move_button = Button(
-            label="Move",
-            style=discord.ButtonStyle.blurple,
-        )
-        move_button.callback = self.move
-
         talk_button = Button(
             label="Talk/Continue Talking",
             style=discord.ButtonStyle.blurple,
@@ -329,16 +324,23 @@ class PlayerUI(View):
             npc_options.append(SelectOption(label=npc.name, value=npc.id, description=npc.description))
         if npc_options == []:
             npc_options.append(SelectOption(label="No NPCs", value="No NPCs", description="There are no NPCs here"))
-        select_npc = Select(placeholder="Select an NPC to talk to", options=npc_options, min_values=1, max_values=1)
-        select_npc.callback = self.talk_to_npc
+        self.select_npc = Select(placeholder="Select an NPC to talk to", options=npc_options, min_values=1, max_values=1)
+        self.select_npc.callback = self.talk_to_npc
 
+
+        building_options = []
+        for building in self.character.current_building.city.buildings:
+            building_options.append(SelectOption(label=building.name, value=building.id, description=""))
+        self.building_select = Select(placeholder="Where do you want to go ?", options=building_options, min_values=1,
+                                 max_values=1)
+        self.building_select.callback = self.move_to_building
+
+        # contextual actions
         action_list = [
-            SelectOption(label="Attack", value="attack", description="Physical attack against the NPC/object you are interacting with"),
             SelectOption(label="Hide", value="hide", description="Find a place to hide"),
-            SelectOption(label="Rest", value="rest", description="Take a Short Rest"),
-            SelectOption(label="Steal", value="steal", description="Attempt to steal from the NPC/object you are interacting with")
+            SelectOption(label="Rest", value="rest", description="Take a Short Rest")
         ]
-        self.select_action = Select(placeholder="Choose action", options=action_list, min_values=1, max_values=1)
+        self.select_action = Select(placeholder="Contextual actions", options=action_list, min_values=1, max_values=1)
         self.select_action.callback = self.do_action
 
 
@@ -353,10 +355,10 @@ class PlayerUI(View):
         spell_select.callback = self.cast_spell
 
         # add the buttons and select menus
-        self.add_item(move_button)
         self.add_item(talk_button)
-        self.add_item(select_npc)
+        self.add_item(self.select_npc)
         self.add_item(self.select_action)
+        self.add_item(self.building_select)
         self.add_item(spell_select)
 
     def add_to_action_log(self, message, color_ansi = ""):
@@ -368,6 +370,7 @@ class PlayerUI(View):
         if len(self.action_log) >= 6:
             self.action_log.pop(0)
 
+    # returns the action log as a string
     def display_action_log(self):
         # display the action log in a code block
         log = "```ansi\n"
@@ -375,27 +378,62 @@ class PlayerUI(View):
             log += message + "\n"
         return log + "```"
 
+    async def update_actions_list(self):
+        # update the action list
+        action_list = [
+            SelectOption(label="Hide", value="hide", description="Find a place to hide"),
+            SelectOption(label="Rest", value="rest", description="Take a Short Rest")
+        ]
+        # if the player is talking to an npc
+        if self.talking_to is not None:
+            action_list.append(SelectOption(label="Attack", value="attack", description="Attack the NPC"))
+            action_list.append(SelectOption(label="Steal", value="steal", description="Attempt to steal from the NPC"))
+            action_list.append(SelectOption(label="Demand Quest", value="demand_quest", description="Demand a quest from the NPC"))
+            action_list.append(SelectOption(label="Demand Trade", value="demand_trade", description="Demand a trade from the NPC"))
+
+        self.select_action.options = action_list
+
+        # update the message
+        message = INTERACTION_PRIVATE_MESSAGES[self.player]
+        await message.edit(view=self)
+
+    async def update_npc_list(self):
+        # update the npc list
+        npc_list = self.character.current_building.get_present_npcs()
+        npc_options = []
+        for npc in npc_list:
+            npc_options.append(SelectOption(label=npc.name, value=npc.id, description=npc.description))
+        if npc_options == []:
+            npc_options.append(SelectOption(label="No NPCs", value="No NPCs", description="There are no NPCs here"))
+        self.select_npc.options = npc_options
+
+        # update the message
+        message = INTERACTION_PRIVATE_MESSAGES[self.player]
+        await message.edit(view=self)
+
+
     async def do_action(self, interaction: discord.Interaction):
         npc = self.talking_to
         action = interaction.data["values"][0]
 
         if action == "steal" and npc is not None:
             if self.d20.ability_check(self.character, "dexterity"):
-                self.add_to_action_log(f"<You manage to steal {random.randint(1, npc.gold)}>")
+                self.add_to_action_log(f"<You manage to steal {random.randint(1, npc.gold)} from {npc.name}>")
             else:
                 self.add_to_action_log(f"<You got caught, but nothing happens>")
         elif action == "demand_quest":
-            pass
+            self.add_to_action_log(npc.give_quest())
         elif action == "demand_trade":
             pass
         # general actions
         elif action == "attack" and npc is not None:
+            # TODO: connect to the combat system
             if self.d20.attack_roll(self.character, npc):
                 self.add_to_action_log(f"<You hit {npc.name} for {random.randint(1, 6)} damage>")
             else:
                 self.add_to_action_log(f"<You miss {npc.name}>")
         elif action == "hide":
-            if self.d20.ability_check(self.character, "stealth"):
+            if self.d20.ability_check(self.character, "dexterity"):
                 self.add_to_action_log(f"<You manage to hide>")
             else:
                 self.add_to_action_log(f"<You got caught, but nothing happens>")
@@ -409,7 +447,26 @@ class PlayerUI(View):
         await message.edit(embed=embed)
         await interaction.response.defer()
 
-    async def move(self, interaction: discord.Interaction):
+
+
+    # callback for the building select menu, only called when the player is moving
+    async def move_to_building(self, interaction: discord.Interaction):
+        # get the building object
+        building = self.character.current_location.get_building(interaction.data["values"][0])
+
+        self.character.move_building(building)
+        self.add_to_action_log(f"<You move to {building.name}>")
+        embed = INTERACTION_PRIVATE_MESSAGES[self.player].embeds[0]
+        embed.set_field_at(3, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
+
+        # remove the select menu
+        message = INTERACTION_PRIVATE_MESSAGES[self.player]
+        await message.edit(view=self, embed=embed)
+
+        # update the lists of actions and npcs
+        await self.update_actions_list()
+        await self.update_npc_list()
+
         await interaction.response.defer()
 
     async def talk_to_npc(self, interaction: discord.Interaction):
@@ -423,11 +480,14 @@ class PlayerUI(View):
         # set the npc you interact with
         self.talking_to = npc
 
+        # update the contextual actions
+        await self.update_actions_list()
+
         # modify the embed
         message = INTERACTION_PRIVATE_MESSAGES[self.player]
         embed = message.embeds[0]
 
-        self.add_to_action_log(f"<You approach {npc.name}, and start a conversation...>\u001b[0;0m")
+        self.add_to_action_log(f"<You approach {npc.name}, and start a conversation...>")
         embed.set_field_at(3, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
         await message.edit(embed=embed)
         await interaction.response.defer()
@@ -473,6 +533,10 @@ class PlayerUI(View):
             dialogue = "(You have exhausted this NPC's dialogue)"
             self.add_to_action_log(f'{dialogue}')
             self.talking_to = None
+
+            # update the contextual actions
+            await self.update_actions_list()
+
         else :
             self.add_to_action_log(f'{npc.name} : "{dialogue}"')
 
@@ -481,3 +545,5 @@ class PlayerUI(View):
         await message.edit(embed=embed)
         await interaction.response.defer()
 
+
+# =========================] MODALS [=========================

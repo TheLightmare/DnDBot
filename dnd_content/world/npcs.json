@@ -3,6 +3,8 @@
     "name": "Gandulf",
     "description": "A strange wizard.",
     "health": 100,
+    "max_health": 100,
+    "armor_class": 10,
     "location": "marienburg",
     "building": "city_entrance",
     "image": "gandulf.png",
@@ -24,5 +26,53 @@
     "spells": [
       "Fire Bolt"
     ]
+  },
+
+  "bartender": {
+    "name": "Bartender",
+    "description": "the owner of the Tavern.",
+    "health": 100,
+    "max_health": 100,
+    "armor_class": 10,
+    "location": "marienburg",
+    "building": "tavern",
+    "image": "bartender.png",
+    "is_merchant": true,
+    "gold": 9999,
+
+    "dialogue": [
+      "Hello, stranger. What can i serve you ?"
+    ],
+    "default_dialogue": "...What can i serve you ?",
+
+    "quest": null,
+
+    "inventory": [],
+    "spells": []
+  },
+
+  "ramon": {
+    "name": "Ramon",
+    "description": "Don't ask about Ramon.",
+    "health": 100,
+    "max_health": 100,
+    "armor_class": 10,
+    "location": "marienburg",
+    "building": "tavern",
+    "image": "ramon.png",
+    "is_merchant": false,
+    "gold": 1,
+
+    "dialogue": [
+      "dflojhgfdkjdwmjkgflhkjwshrwdgxkjljbxfghwldxm",
+      "dfflkjghxlfkhlkdwxfhglmkwxdhr",
+      "dfwhwdlkfjkjwxglfdjblwxhdrhwoiuuvhgbkfh"
+    ],
+    "default_dialogue": "Huh ?",
+
+    "quest": null,
+
+    "inventory": [],
+    "spells": []
   }
 }
