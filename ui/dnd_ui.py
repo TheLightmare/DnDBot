@@ -52,7 +52,7 @@ class LobbyUI(View):
         self.add_item(LEAVE)
 
         # background tasks
-        player_chat.start(self.thread, self.players)
+        self.tasks.append(player_chat.start(self.thread, self.players))
 
 
     async def invite_player(self, interaction: discord.Interaction):
@@ -288,9 +288,11 @@ async def update_personal_embed(message, character: Character):
                           value=player_string,
                           inline=True)
 
-    # modify the message
-    await message.edit(embed=embed)
-
+    # modify the message if it still exists (should happen only if the thread got deleted)
+    try:
+        await message.edit(embed=embed)
+    except discord.errors.NotFound:
+        pass
 
 @tasks.loop(seconds=1)
 async def player_chat(thread: discord.Thread, players: list):
