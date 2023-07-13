@@ -128,9 +128,11 @@ class Character():
 
     def move_location(self, location):
         self.current_location = location
+        self.current_location.add_player(self)
 
     def move_building(self, building):
         self.current_building = building
+        self.current_building.add_player(self)
 
     def get_modifier(self, stat):
         modifier = 0

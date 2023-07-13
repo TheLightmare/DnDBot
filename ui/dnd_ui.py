@@ -203,12 +203,12 @@ class CampaignUI(View):
 
 
         # set the current location for each character
-        if self.host_character.current_location is None:
-            self.host_character.current_location = self.world.starting_location
-            self.host_character.current_building = self.world.starting_location.buildings[0]
         for character in self.characters:
             character.current_location = self.world.starting_location
             character.current_building = self.world.starting_location.buildings[0]
+            # add character to the list of the location and building
+            character.current_location.add_player(character)
+            character.current_building.add_player(character)
 
         self.players_with_ui = {}
         get_personal_ui = Button(
@@ -233,6 +233,7 @@ class CampaignUI(View):
         embed.add_field(name="Character", value=f"**Name:** {character.name}\n**Age:** {character.age}\n**Gold:** {character.gold}", inline=False)
         embed.add_field(name="CURRENT LOCATION", value=f"__{character.current_building.name}__ : {character.current_building.description}", inline=True)
         embed.add_field(name="PRESENT NPCs", value="", inline=True)
+        embed.add_field(name="PRESENT PLAYERS", value="", inline=True)
         embed.add_field(name="=========] ACTION LOG [=========", value="", inline=False)
 
         # send the embed
@@ -277,6 +278,15 @@ async def update_personal_embed(message, character: Character):
                        name="PRESENT NPCs",
                        value=npc_string,
                        inline=True)
+
+    players = character.current_building.get_present_players()
+    player_string = ""
+    for player in players:
+        player_string += f"- {player.name}\n"
+    embed.set_field_at(3,
+                          name="PRESENT PLAYERS",
+                          value=player_string,
+                          inline=True)
 
     # modify the message
     await message.edit(embed=embed)
@@ -443,7 +453,7 @@ class PlayerUI(View):
         # update the embed
         message = INTERACTION_PRIVATE_MESSAGES[self.player]
         embed = message.embeds[0]
-        embed.set_field_at(3, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
+        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
         await message.edit(embed=embed)
         await interaction.response.defer()
 
@@ -454,10 +464,14 @@ class PlayerUI(View):
         # get the building object
         building = self.character.current_location.get_building(interaction.data["values"][0])
 
+        # remove player from the current building
+        self.character.current_building.remove_player(self.character)
+
+        # move the player
         self.character.move_building(building)
         self.add_to_action_log(f"<You move to {building.name}>")
         embed = INTERACTION_PRIVATE_MESSAGES[self.player].embeds[0]
-        embed.set_field_at(3, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
+        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
 
         # remove the select menu
         message = INTERACTION_PRIVATE_MESSAGES[self.player]
@@ -488,7 +502,7 @@ class PlayerUI(View):
         embed = message.embeds[0]
 
         self.add_to_action_log(f"<You approach {npc.name}, and start a conversation...>")
-        embed.set_field_at(3, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
+        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
         await message.edit(embed=embed)
         await interaction.response.defer()
 
@@ -507,7 +521,7 @@ class PlayerUI(View):
         # get the spell result
         spell_result = spell.cast(self.character)
         self.add_to_action_log(f'<{spell_result}>')
-        embed.set_field_at(3, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
+        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
 
         # modify the embed
         await message.edit(embed=embed)
@@ -541,7 +555,7 @@ class PlayerUI(View):
             self.add_to_action_log(f'{npc.name} : "{dialogue}"')
 
         # modify the embed
-        embed.set_field_at(3, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
+        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
         await message.edit(embed=embed)
         await interaction.response.defer()
 

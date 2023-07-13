@@ -37,6 +37,9 @@ class Building():
     def get_present_npcs(self):
         return self.npcs
 
+    def get_present_players(self):
+        return self.players
+
 
 
 class CityEntrance(Building):
