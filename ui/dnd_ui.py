@@ -319,7 +319,10 @@ class PlayerUI(View):
         # npc the player is talking to
         self.talking_to = None
 
+        # action log
         self.action_log = []
+        # index of the action log (0 or more)
+        self.action_log_index = 0
 
         # buttons
         talk_button = Button(
@@ -327,6 +330,34 @@ class PlayerUI(View):
             style=discord.ButtonStyle.blurple,
         )
         talk_button.callback = self.talk
+
+        scroll_up_button = Button(
+            label="Scroll Up",
+            emoji="⬆️",
+            style=discord.ButtonStyle.blurple,
+        )
+        scroll_up_button.callback = self.scroll_up
+
+        scroll_down_button = Button(
+            label="Scroll Down",
+            emoji="⬇️",
+            style=discord.ButtonStyle.blurple,
+        )
+        scroll_down_button.callback = self.scroll_down
+
+        scroll_top_button = Button(
+            label="Scroll to Top",
+            emoji="🔝",
+            style=discord.ButtonStyle.blurple,
+        )
+        scroll_top_button.callback = self.scroll_top
+
+        scroll_bottom_button = Button(
+            label="Scroll to Bottom",
+            emoji="🔚",
+            style=discord.ButtonStyle.blurple,
+        )
+        scroll_bottom_button.callback = self.scroll_bottom
 
         # select menus
 
@@ -368,6 +399,10 @@ class PlayerUI(View):
 
         # add the buttons and select menus
         self.add_item(talk_button)
+        self.add_item(scroll_up_button)
+        self.add_item(scroll_down_button)
+        self.add_item(scroll_top_button)
+        self.add_item(scroll_bottom_button)
         self.add_item(self.select_npc)
         self.add_item(self.select_action)
         self.add_item(self.building_select)
@@ -379,16 +414,53 @@ class PlayerUI(View):
         else:
             self.action_log.append(color_ansi + message + "\u001b[0m")
 
-        if len(self.action_log) >= 6:
+        if len(self.action_log) >= 100:
             self.action_log.pop(0)
 
     # returns the action log as a string
     def display_action_log(self):
         # display the action log in a code block
         log = "```ansi\n"
-        for message in self.action_log:
-            log += message + "\n"
+        maxrange = min(6, len(self.action_log))
+        for i in range(maxrange):
+            log += self.action_log[len(self.action_log) - maxrange - self.action_log_index + i] + "\n"
+
         return log + "```"
+
+    async def scroll_up(self, interaction: discord.Interaction):
+        if self.action_log_index + 6 < len(self.action_log):
+            self.action_log_index += 1
+            embed = INTERACTION_PRIVATE_MESSAGES[self.player].embeds[0]
+            embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(),
+                               inline=False)
+            await interaction.response.edit_message(embed=embed)
+        else :
+            await interaction.response.defer()
+
+    async def scroll_down(self, interaction: discord.Interaction):
+        if self.action_log_index > 0:
+            self.action_log_index -= 1
+            embed = INTERACTION_PRIVATE_MESSAGES[self.player].embeds[0]
+            embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(),
+                               inline=False)
+            await interaction.response.edit_message(embed=embed)
+        else :
+            await interaction.response.defer()
+
+    async def scroll_top(self, interaction: discord.Interaction):
+        if len(self.action_log) > 6:
+            self.action_log_index = len(self.action_log) - 6
+        embed = INTERACTION_PRIVATE_MESSAGES[self.player].embeds[0]
+        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(),
+                           inline=False)
+        await interaction.response.edit_message(embed=embed)
+
+    async def scroll_bottom(self, interaction: discord.Interaction):
+        self.action_log_index = 0
+        embed = INTERACTION_PRIVATE_MESSAGES[self.player].embeds[0]
+        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(),
+                           inline=False)
+        await interaction.response.edit_message(embed=embed)
 
     async def update_actions_list(self):
         # update the action list
