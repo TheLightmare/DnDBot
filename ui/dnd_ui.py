@@ -88,6 +88,8 @@ class LobbyUI(View):
         embed.set_field_at(1, name="Players", value=" ".join([player.mention for player in self.players]), inline=False)
         await interaction.message.edit(embed=embed)
 
+        await interaction.response.defer()
+
 
     async def remove_player(self, interaction: discord.Interaction):
         # check if the one who invited is the host
@@ -114,6 +116,9 @@ class LobbyUI(View):
 
         # remove the player from the thread
         await self.thread.remove_user(player)
+
+        await interaction.response.defer()
+
 
     async def start_campaign(self, interaction: discord.Interaction):
         # check if the one who invited is the host
@@ -165,6 +170,10 @@ class LobbyUI(View):
         if interaction.user == self.host:
             # make the first player the host
             self.host = self.players[0]
+            # update the embed
+            embed = interaction.message.embeds[0]
+            embed.set_field_at(0, name="Host", value=self.host.mention, inline=False)
+            await interaction.message.edit(embed=embed)
             # send a message in the thread to the player
             await self.thread.send(f"{self.host} is now the host !", delete_after=10)
 
