@@ -9,6 +9,11 @@ class NPC():
         self.name = None
         self.description = None
 
+        # health and armor class
+        self.health = 100
+        self.max_health = 100
+        self.armor_class = 10
+
         # current location
         self.location = None
         self.building = None
@@ -42,6 +47,9 @@ class NPC():
         self.id = id
         self.name = npc["name"]
         self.description = npc["description"]
+        self.health = npc["health"]
+        self.max_health = npc["max_health"]
+        self.armor_class = npc["armor_class"]
         self.location = npc["location"]
         self.building = npc["building"]
         self.image = npc["image"]
@@ -72,6 +80,9 @@ class NPC():
         if self.is_merchant:
             actions.append("demand_trade")
         return actions
+
+    def get_armor_class(self):
+        return self.armor_class
 
     def give_quest(self):
         if self.quest is None:

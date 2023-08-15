@@ -1,0 +1,32 @@
+{
+  "nodes":
+  [
+    {
+      "Salem": [
+        "Salem is the capital of a merchant republic",
+        0,
+        0
+      ]
+    },
+    {
+      "Dark Castle": [
+        "The Dark Castle is a fortress of the evil wizard",
+        0,
+        0
+      ]
+    }
+  ],
+  "roads":
+  {
+    "Salem":
+    [
+      "Dark Castle",
+      "I want to die"
+    ],
+    "Dark Castle":
+    [
+      "Salem",
+      "I want to die"
+    ]
+  }
+}

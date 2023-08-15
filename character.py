@@ -126,12 +126,34 @@ class Character():
                 self.unspent_points += 2
 
 
+    def move_location(self, location):
+        self.current_location = location
+        self.current_location.add_player(self)
+
+    def move_building(self, building):
+        self.current_building = building
+        self.current_building.add_player(self)
+
     def get_modifier(self, stat):
         modifier = 0
         for source in self.stat_modifiers[stat]:
             modifier += self.stat_modifiers[stat][source]
         return modifier
 
+
+    def get_attack_stat(self):
+        if self.job == "Fighter":
+            return "strength"
+        elif self.job == "Rogue":
+            return "dexterity"
+        elif self.job == "Wizard":
+            return "intelligence"
+        elif self.job == "Cleric":
+            return "wisdom"
+        elif self.job == "Bard":
+            return "charisma"
+        else:
+            return "strength"
 
     def get_roll_bonus(self, stat):
         total = self.get_modifier(stat) + self.stats[stat]
