@@ -5,7 +5,7 @@ from discord.ui import Button, View, Select, UserSelect, Modal, TextInput
 from discord.components import SelectOption
 from misc_utils import *
 from character import Character
-from ui.trade_ui import TradeUI, TestUI
+from ui.trade_ui import TradeUI
 from world import World
 from util.dice import Dice
 
@@ -522,7 +522,7 @@ class PlayerUI(View):
             # TODO: this does not work for some reason
             await interaction.response.send_message(
                 f"{self.character.name} offers {npc.name} a trade",
-                view=TradeUI(self.player, self.character, npc),
+                view=TradeUI(self.player, self.character, npc, self),
                 ephemeral=True
             )
             return
@@ -647,6 +647,9 @@ class PlayerUI(View):
         embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
         await message.edit(embed=embed)
         await interaction.response.defer()
+
+
+
 
 
 # =========================] MODALS [=========================

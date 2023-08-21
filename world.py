@@ -50,6 +50,7 @@ class City(Node):
         return None
 
 
+
 class Road(Edge):
     def __init__(self, name, node1, node2):
         super().__init__(name, node1, node2)

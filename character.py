@@ -1,8 +1,10 @@
 import json
+
+import misc_utils
+import world
 from util.settings import *
 import discord
 
-import util
 from spell import Spell
 
 class Character():
@@ -84,7 +86,7 @@ class Character():
 
 
     def set_race(self, race_name):
-        races = util.load_races()
+        races = misc_utils.load_races()
         race = races[race_name]
 
         self.race = race["name"]
@@ -94,7 +96,7 @@ class Character():
             self.stat_modifiers[stat]["race"] = value
 
     def set_job(self, job_name):
-        classes = util.load_classes()
+        classes = misc_utils.load_classes()
         job = classes[job_name]
 
         self.job = job["name"]
@@ -102,7 +104,7 @@ class Character():
         self.proficiency_bonus = job["levelup_pattern"][0]["proficiency_bonus"]
 
         # load available spells
-        spells = util.load_spells()
+        spells = misc_utils.load_spells()
         for spell in spells:
             if spells[spell]["available"] == job_name:
                 self.available_spells.append(spell)
@@ -126,7 +128,7 @@ class Character():
                 self.unspent_points += 2
 
 
-    def move_location(self, location):
+    def move_location(self, location: world.City):
         self.current_location = location
         self.current_location.add_player(self)
 
@@ -194,6 +196,10 @@ class Character():
         with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
             characters = json.load(f)
 
+        # load world
+        self.world = world.World()
+        self.world.load()
+
         if str(self.author.id) in characters:
             # load character
             character = characters[str(self.author.id)]
@@ -241,9 +247,12 @@ class Character():
             #load armor class
             self.armor_class = character["armor_class"]
             #load current location
-            self.current_location = character["current_location"]
+            current_location_str = character["current_location"]
+            self.current_location = self.world.get_node(current_location_str)
             #load current building
-            self.current_building = character["current_building"]
+            current_building_str = character["current_building"]
+            if self.current_location is not None:
+                self.current_building = self.current_location.get_building(current_building_str)
             return True
 
         return False
@@ -263,8 +272,8 @@ class Character():
             "race": self.race,
             "class": self.job,
 
-            "current_location": self.current_location,
-            "current_building": self.current_building,
+            "current_location": self.current_location.name,
+            "current_building": self.current_building.name,
 
             "level": self.level,
             "xp": self.xp,

@@ -1,3 +1,4 @@
+import misc_utils
 import util
 from discord.ext import commands
 from character import Character
@@ -31,7 +32,7 @@ class Dnd(commands.Cog):
         thread = await ctx.channel.create_thread(name="Character creation", reason="Character creation", auto_archive_duration=60)
         await thread.send(f"{ctx.author.mention} is creating a new character")
 
-        await util.create_character(self.bot, thread, ctx.author)
+        await misc_utils.create_character(self.bot, thread, ctx.author)
 
 
 
@@ -59,7 +60,7 @@ class Dnd(commands.Cog):
             await ctx.send(f"{user.name} is not registered")
             return
 
-        await util.character_sheet(self.bot, ctx.channel, user)
+        await misc_utils.character_sheet(self.bot, ctx.channel, user)
 
 
     @commands.command()

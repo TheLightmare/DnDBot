@@ -5,28 +5,14 @@ from discord.ui import Button, View, Select, UserSelect, Modal, TextInput
 import json
 from util.item import *
 
-class TestUI(View):
-    def __init__(self):
-        super().__init__()
-
-        self.button = Button(
-            style=discord.ButtonStyle.green,
-            label="Test",
-        )
-        self.button.callback = self.test
-
-        self.add_item(self.button)
-
-    async def test(self, interaction):
-        await interaction.response.send_message("Test")
-
 class TradeUI(View):
-    def __init__(self, player, character, npc):
+    def __init__(self, player, character, npc, player_ui):
         super().__init__()
 
         self.player = player
         self.character = character
         self.npc = npc
+        self.player_ui = player_ui
 
         # current selected items to buy
         self.buy_items = []
@@ -151,7 +137,8 @@ class TradeUI(View):
 
     async def exit(self, interaction: discord.Interaction):
         # remove the trade message
-        await interaction.message.delete()
+        await interaction.response.defer()
+        await interaction.delete_original_response()
 
     async def buy_select(self, interaction: discord.Interaction):
         # get the selected items

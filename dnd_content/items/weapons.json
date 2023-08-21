@@ -1,6 +1,6 @@
 {
-  "Wooden Club":{
-    "name":"Club",
+  "wooden_club":{
+    "name":"Wooden Club",
     "description":"a sturdy piece of wood",
     "image":"",
     "twoHanded":false,
@@ -8,7 +8,7 @@
 
     "tier":1
   },
-  "Wooden Sword":{
+  "wooden_sword":{
       "name":"Wooden Sword",
       "description":"a very basic sword made of wood",
       "image":"",
@@ -17,7 +17,7 @@
 
       "tier":1
   },
-  "Great Sword of Artorias": {
+  "artorias_sword": {
     "name":"Great Sword of Artorias",
     "description":"a sword of legend wielded by the great Artorias, the Abysswalker.",
     "image":"",
