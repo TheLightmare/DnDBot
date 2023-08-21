@@ -1,0 +1,13 @@
+{
+  "dirt": {
+    "name": "Dirt",
+    "description": "A bunch of dirt.",
+    "image": "dirt.png",
+    "value": 1,
+    "durability": -1,
+    "max_stack": 1,
+    "properties": {
+
+    }
+  }
+}

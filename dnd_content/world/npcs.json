@@ -47,7 +47,10 @@
 
     "quest": null,
 
-    "inventory": [],
+    "inventory": [
+      "dirt"
+    ],
+
     "spells": []
   },
 

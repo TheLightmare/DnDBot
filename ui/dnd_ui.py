@@ -5,6 +5,7 @@ from discord.ui import Button, View, Select, UserSelect, Modal, TextInput
 from discord.components import SelectOption
 from misc_utils import *
 from character import Character
+from ui.trade_ui import TradeUI, TestUI
 from world import World
 from util.dice import Dice
 
@@ -477,7 +478,7 @@ class PlayerUI(View):
             SelectOption(label="Hide", value="hide", description="Find a place to hide"),
             SelectOption(label="Rest", value="rest", description="Take a Short Rest")
         ]
-        # if the player is talking to an npc
+        # if the player is talking to a npc
         if self.talking_to is not None:
             action_list.append(SelectOption(label="Attack", value="attack", description="Attack the NPC"))
             action_list.append(SelectOption(label="Steal", value="steal", description="Attempt to steal from the NPC"))
@@ -517,7 +518,14 @@ class PlayerUI(View):
         elif action == "demand_quest":
             self.add_to_action_log(npc.give_quest())
         elif action == "demand_trade":
-            pass
+            # create the trade message
+            # TODO: this does not work for some reason
+            await interaction.response.send_message(
+                f"{self.character.name} offers {npc.name} a trade",
+                view=TradeUI(self.player, self.character, npc),
+                ephemeral=True
+            )
+            return
         # general actions
         elif action == "attack" and npc is not None:
             # TODO: connect to the combat system
@@ -539,8 +547,6 @@ class PlayerUI(View):
         embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
         await message.edit(embed=embed)
         await interaction.response.defer()
-
-
 
     # callback for the building select menu, only called when the player is moving
     async def move_to_building(self, interaction: discord.Interaction):

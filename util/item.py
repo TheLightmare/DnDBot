@@ -1,10 +1,10 @@
-from settings import *
+from util.settings import *
 import json
 
 # abstract Item class for everything basically
 class Item():
-    def __init__(self):
-        self.id = ""
+    def __init__(self, id):
+        self.id = id
 
         # fancy stuff
         self.name = ""
@@ -23,6 +23,19 @@ class Item():
         self.properties = {
             "usable_on": [],
         }
+
+    def load(self):
+        with open(CONTENT_FOLDER + "items/" + "items.json", "r") as f:
+            items_dict = json.load(f)
+
+        item = items_dict[self.id]
+        self.name = item["name"]
+        self.description = item["description"]
+        self.image = item["image"]
+        self.value = item["value"]
+        self.durability = item["durability"]
+        self.max_stack = item["max_stack"]
+        self.properties = item["properties"]
 
     def use(self):
         pass
