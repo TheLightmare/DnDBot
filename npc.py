@@ -64,14 +64,17 @@ class NPC():
 
     def talk(self):
         if self.dialogue is None:
-            return "I have nothing to say to you."
+            return (self.default_dialogue, True)
         else:
             if self.current_line >= len(self.dialogue):
-                self.current_line = 0
-                return None
+                #self.current_line = 0
+                return (self.default_dialogue, True)
             text = self.dialogue[self.current_line]
             self.current_line += 1
-            return text
+            return (text, False)
+
+    def reset_dialogue(self):
+        self.current_line = 0
 
     def get_available_actions(self):
         actions = ["steal"]

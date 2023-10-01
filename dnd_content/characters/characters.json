@@ -1,15 +1,15 @@
 {
     "323028456977727488": {
-        "name": "Daedalus",
-        "age": "156",
+        "name": "h",
+        "age": "999",
         "race": "Human",
         "class": "Wizard",
-        "current_location": "Marienburg",
-        "current_building": "Tavern",
+        "current_location": "",
+        "current_building": "",
         "level": 1,
         "xp": 0,
         "unspent_points": 10,
-        "gold": 9,
+        "gold": 10,
         "max_hp": 10,
         "current_hp": 10,
         "armor_class": 10,
@@ -48,7 +48,7 @@
             "Arcane Tradition"
         ],
         "inventory": [
-            "dirt"
+            "Wooden Club"
         ],
         "spell_slots": [
             3,
@@ -63,8 +63,84 @@
         ],
         "spells": [
             [
-                "Acid Splash",
-                "Fire Bolt"
+                "Acid Splash"
+            ],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
+    },
+    "307930491762245642": {
+        "name": "Asclios",
+        "age": "20",
+        "race": "Half-Elf",
+        "class": "Wizard",
+        "current_location": "",
+        "current_building": "",
+        "level": 1,
+        "xp": 0,
+        "unspent_points": 10,
+        "gold": 10,
+        "max_hp": 10,
+        "current_hp": 10,
+        "armor_class": 10,
+        "proficiencies": [],
+        "proficiency_bonus": "2",
+        "stats": {
+            "strength": 10,
+            "dexterity": 10,
+            "constitution": 10,
+            "intelligence": 10,
+            "wisdom": 10,
+            "charisma": 10
+        },
+        "stat_modifiers": {
+            "strength": {
+                "race": 0
+            },
+            "dexterity": {
+                "race": 0
+            },
+            "constitution": {
+                "race": 0
+            },
+            "intelligence": {
+                "race": 0
+            },
+            "wisdom": {
+                "race": 0
+            },
+            "charisma": {
+                "race": 2
+            }
+        },
+        "features": [
+            "Spellcasting",
+            "Arcane Tradition"
+        ],
+        "inventory": [
+            "Wooden Sword"
+        ],
+        "spell_slots": [
+            3,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "spells": [
+            [
+                "Fire Bolt",
+                "Acid Splash"
             ],
             [
                 "Blade Ward"

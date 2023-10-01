@@ -266,14 +266,21 @@ class Character():
             for spell in self.spells[tier]:
                 spell_names[tier].append(spell.name)
 
+        current_location_str = ""
+        if self.current_location is not None:
+            current_location_str = self.current_location.name
+        current_building_str = ""
+        if self.current_building is not None:
+            current_building_str = self.current_building.name
+
         characters[str(self.author.id)] = {
             "name": self.name,
             "age": self.age,
             "race": self.race,
             "class": self.job,
 
-            "current_location": self.current_location.name,
-            "current_building": self.current_building.name,
+            "current_location": current_location_str,
+            "current_building": current_building_str,
 
             "level": self.level,
             "xp": self.xp,

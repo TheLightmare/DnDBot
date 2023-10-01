@@ -631,10 +631,9 @@ class PlayerUI(View):
         embed = message.embeds[0]
 
         # get the dialogue
-        dialogue = npc.talk()
-        if dialogue == None:
-            dialogue = "(You have exhausted this NPC's dialogue)"
-            self.add_to_action_log(f'{dialogue}')
+        (dialogue, is_end) = npc.talk()
+        if is_end:
+            self.add_to_action_log(f"<You finished talking to {npc.name}>")
             self.talking_to = None
 
             # update the contextual actions
