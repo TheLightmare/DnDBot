@@ -275,6 +275,9 @@ class PlayerUI(View):
         message = self.message
         await message.edit(view=self, embed=embed)
 
+        # update the embed
+        await self.update_personal_embed()
+
         # update the lists of actions and npcs
         await self.update_actions_list()
         await self.update_npc_list()
@@ -356,8 +359,37 @@ class PlayerUI(View):
         await message.edit(embed=embed)
         await interaction.response.defer()
 
+    @tasks.loop(seconds=2)
+    async def update_personal_embed(self):
+        # update the embed
+        embed = self.message.embeds[0]
+        embed.set_field_at(1,
+                           name="CURRENT LOCATION",
+                           value=f"__{self.character.current_building.name}__ : {self.character.current_building.description}",
+                           inline=True)
 
+        npcs = self.character.current_building.get_present_npcs()
+        npc_string = ""
+        for npc in npcs:
+            npc_string += f"- {npc.name} : {npc.description}\n"
+        embed.set_field_at(2,
+                           name="PRESENT NPCs",
+                           value=npc_string,
+                           inline=True)
 
+        players = self.character.current_building.get_present_players()
+        player_string = ""
+        for player in players:
+            player_string += f"- {player.name}\n"
+        embed.set_field_at(3,
+                           name="PRESENT PLAYERS",
+                           value=player_string,
+                           inline=True)
 
+        # modify the message if it still exists (should happen only if the thread got deleted)
+        try:
+            await self.message.edit(embed=embed)
+        except discord.errors.NotFound:
+            pass
 
 # =========================] MODALS [=========================

@@ -153,5 +153,155 @@
             [],
             []
         ]
+    },
+    "609774243051339787": {
+        "name": "Chicken",
+        "age": "21",
+        "race": "Elf",
+        "class": "Warlock",
+        "current_location": "",
+        "current_building": "",
+        "level": 1,
+        "xp": 0,
+        "unspent_points": 10,
+        "gold": 10,
+        "max_hp": 10,
+        "current_hp": 10,
+        "armor_class": 10,
+        "proficiencies": [],
+        "proficiency_bonus": "2",
+        "stats": {
+            "strength": 10,
+            "dexterity": 10,
+            "constitution": 10,
+            "intelligence": 10,
+            "wisdom": 10,
+            "charisma": 10
+        },
+        "stat_modifiers": {
+            "strength": {
+                "race": 0
+            },
+            "dexterity": {
+                "race": 2
+            },
+            "constitution": {
+                "race": 0
+            },
+            "intelligence": {
+                "race": 2
+            },
+            "wisdom": {
+                "race": 0
+            },
+            "charisma": {
+                "race": 0
+            }
+        },
+        "features": [
+            "Otherworldly Patron",
+            "Pact Magic"
+        ],
+        "inventory": [],
+        "spell_slots": [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "spells": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
+    },
+    "389537023641518081": {
+        "name": "pink",
+        "age": "21",
+        "race": "Human",
+        "class": "Warlock",
+        "current_location": "",
+        "current_building": "",
+        "level": 1,
+        "xp": 0,
+        "unspent_points": 0,
+        "gold": 10,
+        "max_hp": 10,
+        "current_hp": 10,
+        "armor_class": 10,
+        "proficiencies": [],
+        "proficiency_bonus": "2",
+        "stats": {
+            "strength": 20,
+            "dexterity": 10,
+            "constitution": 10,
+            "intelligence": 10,
+            "wisdom": 10,
+            "charisma": 10
+        },
+        "stat_modifiers": {
+            "strength": {
+                "race": 1
+            },
+            "dexterity": {
+                "race": 1
+            },
+            "constitution": {
+                "race": 1
+            },
+            "intelligence": {
+                "race": 1
+            },
+            "wisdom": {
+                "race": 1
+            },
+            "charisma": {
+                "race": 1
+            }
+        },
+        "features": [
+            "Otherworldly Patron",
+            "Pact Magic"
+        ],
+        "inventory": [
+            "Wooden Sword"
+        ],
+        "spell_slots": [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "spells": [
+            [
+                "Eldritch Blast"
+            ],
+            [
+                "Blade Ward"
+            ],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
     }
 }
