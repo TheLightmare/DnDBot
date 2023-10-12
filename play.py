@@ -1,5 +1,6 @@
 import discord
-import ui.dnd_ui
+import ui.player_ui
+import ui.lobby_ui
 
 class Play():
     def __init__(self, bot, thread, host: discord.Member):
@@ -18,7 +19,7 @@ class Play():
         common_embed.add_field(name="Spectators", value=" ", inline=False)
 
         # send the embed
-        await self.thread.send(embed=common_embed, view=ui.dnd_ui.LobbyUI(self.bot, self.thread, self.host))
+        await self.thread.send(embed=common_embed, view=ui.lobby_ui.LobbyUI(self.bot, self.thread, self.host))
 
     # background tasks
 
