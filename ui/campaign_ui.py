@@ -58,8 +58,9 @@ class CampaignUI(View):
         )
         move_party.callback = self.move_party
 
-        self.add_item(get_personal_ui)
         self.add_item(move_party)
+        self.add_item(get_personal_ui)
+
 
     async def get_personal_ui(self, interaction: discord.Interaction):
         # check if the player already has a ui
