@@ -77,5 +77,34 @@
 
     "inventory": [],
     "spells": []
+  },
+
+  "hans": {
+    "name": "Hans",
+    "description": "An even stranger wizard.",
+    "health": 100,
+    "max_health": 100,
+    "armor_class": 10,
+    "location": "altdorf",
+    "building": "city_entrance",
+    "image": "hans.png",
+    "is_merchant": false,
+    "gold": 1000,
+
+    "dialogue": [
+      "Hello, I am Hans the wizard !",
+      "Have you seen Gandulf ?",
+      "I am looking for him since 3 years !"
+    ],
+    "default_dialogue": "That old fart better still be around !",
+
+    "quest": null,
+
+    "inventory": [
+      "end_of_everything"
+    ],
+    "spells": [
+      "Fire Bolt"
+    ]
   }
 }

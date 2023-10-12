@@ -146,6 +146,10 @@ class Character():
     def get_attack_stat(self):
         if self.job == "Fighter":
             return "strength"
+        elif self.job == "Ranger":
+            return "dexterity"
+        elif self.job == "Warlock":
+            return "charisma"
         elif self.job == "Rogue":
             return "dexterity"
         elif self.job == "Wizard":

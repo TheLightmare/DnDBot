@@ -3,8 +3,8 @@ from util.building import *
 from npc import *
 
 class City(Node):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, name, id):
+        super().__init__(name, id)
         self.description = ""
         self.npcs = []
         self.buildings = []
@@ -39,7 +39,7 @@ class City(Node):
         self.players.remove(player)
         # remove the player from the building he is in
         for building in self.buildings:
-            if building.id == player.building:
+            if building.id == player.current_building:
                 building.remove_player(player)
                 break
 
@@ -52,8 +52,8 @@ class City(Node):
 
 
 class Road(Edge):
-    def __init__(self, name, node1, node2):
-        super().__init__(name, node1, node2)
+    def __init__(self, name, id, node1, node2):
+        super().__init__(name, id, node1, node2)
         self.event_pool = []
         self.distance = 0
 
@@ -65,8 +65,11 @@ class Road(Edge):
 class World(Graph):
     def __init__(self):
         super().__init__()
+        # list of cities, separate from the graph
+        self.cities = []
+
         self.load()
-        self.starting_location = self.get_node("Marienburg")
+        self.starting_location = self.get_node("marienburg")
 
         # time goes from 0 to 24
         self.time = 12
@@ -103,11 +106,15 @@ class World(Graph):
         with open(CONTENT_FOLDER + "world/" + "world_map.json", 'r') as f:
             world = json.load(f)
 
+        # clear the graph
+        self.clear()
+        self.cities = []
+
         cities = world["cities"]
         roads = world["roads"]
 
         for city_json in cities:
-            city = City(cities[city_json]["name"])
+            city = City(cities[city_json]["name"], city_json)
             city.description = cities[city_json]["description"]
 
             for building_id in cities[city_json]["buildings"]:
@@ -121,12 +128,12 @@ class World(Graph):
                 npc.load(npc_id)
                 city.add_npc(npc)
 
-
+            self.cities.append(city)
             self.add_node(city)
 
 
         for road_json in roads:
-            road = Road(road_json, roads[road_json]["path"][0], roads[road_json]["path"][1])
+            road = Road(road_json, roads[road_json]["name"], roads[road_json]["path"][0], roads[road_json]["path"][1])
             road.set_distance(roads[road_json]["distance"])
 
             self.add_edge(road)

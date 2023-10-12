@@ -1,8 +1,9 @@
 
 # abstract Node class
 class Node():
-    def __init__(self, name):
+    def __init__(self, name, id):
         self.name = name
+        self.id = id
         self.neighbors = []
 
     def add_neighbor(self, neighbor):
@@ -11,8 +12,9 @@ class Node():
 
 # abstract Edge class
 class Edge():
-    def __init__(self, name, node1, node2):
+    def __init__(self, name, id, node1, node2):
         self.name = name
+        self.id = id
         self.node1 = node1
         self.node2 = node2
 
@@ -36,11 +38,13 @@ class Graph():
             elif node.name == edge.node2:
                 node.add_neighbor(edge.node1)
 
+    def clear(self):
+        self.nodes = []
+        self.edges = []
 
-
-    def get_node(self, name):
+    def get_node(self, id):
         for node in self.nodes:
-            if node.name == name:
+            if node.id == id:
                 return node
         return None
 
