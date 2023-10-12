@@ -106,6 +106,7 @@ class World(Graph):
         with open(CONTENT_FOLDER + "world/" + "world_map.json", 'r') as f:
             world = json.load(f)
 
+
         # clear the graph
         self.clear()
         self.cities = []
@@ -113,17 +114,19 @@ class World(Graph):
         cities = world["cities"]
         roads = world["roads"]
 
+        # load buildings
+        with open(CONTENT_FOLDER + "world/" + "buildings.json", 'r') as f:
+            buildings = json.load(f)
+
         for city_json in cities:
             city = City(cities[city_json]["name"], city_json)
             city.description = cities[city_json]["description"]
 
             for building_id in cities[city_json]["buildings"]:
-                if building_id == "city_entrance":
-                    city.buildings.append(CityEntrance(city))
-                elif building_id == "tavern":
-                    city.buildings.append(Tavern(city))
-                elif building_id == "temple":
-                    city.buildings.append(Temple(city))
+                building_dict = buildings[building_id]
+                building = Building(city, building_id)
+                building.load(building_dict)
+                city.buildings.append(building)
 
             for npc_id in cities[city_json]["npcs"]:
                 npc = NPC()

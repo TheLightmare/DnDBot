@@ -21,7 +21,7 @@
     "quest": null,
 
     "inventory": [
-      "end_of_everything"
+      "item:end_of_everything"
     ],
     "spells": [
       "Fire Bolt"
@@ -48,7 +48,7 @@
     "quest": null,
 
     "inventory": [
-      "dirt"
+      "item:dirt"
     ],
 
     "spells": []
@@ -133,6 +133,35 @@
     ],
     "spells": [
       "Fire Bolt"
+    ]
+  },
+
+  "weaponsmith": {
+    "name": "Weaponsmith",
+    "description": "A weaponsmith of the city of Marienburg.",
+    "health": 100,
+    "max_health": 100,
+    "armor_class": 10,
+    "location": "marienburg",
+    "building": "armory",
+    "image": "weaponsmith.png",
+    "is_merchant": true,
+    "gold": 1000,
+
+    "dialogue": [
+      "Greetings, I am the weaponsmith of the city of Marienburg.",
+      "I am here to help you in your quest.",
+      "Oh wait, there is no quest yet !"
+    ],
+    "default_dialogue": "Damn now i feel useless...",
+
+    "quest": null,
+
+    "inventory": [
+      "weapon:artorias_sword"
+    ],
+    "spells": [
+
     ]
   }
 }

@@ -44,9 +44,7 @@ class Item():
 # Generic potion class, should work for every potion with no inheritance needed
 class Potion(Item):
     def __init__(self, id):
-        super().__init__()
-        self.id = id
-
+        super().__init__(id)
         self.stack = 3
 
         # directly load the potion on init
@@ -60,6 +58,29 @@ class Potion(Item):
         self.name = potion["name"]
         self.description = potion["description"]
 
+class Weapon(Item):
+    def __init__(self, id):
+        super().__init__(id)
+
+        # directly load the weapon on init
+        self.tier = None
+        self.attack = None
+        self.twoHanded = False
+
+        self.load()
+
+    def load(self):
+        with open(CONTENT_FOLDER + "items/" + "weapons.json", "r") as f:
+            weapons_dict = json.load(f)
+
+        weapon = weapons_dict[self.id]
+        self.name = weapon["name"]
+        self.description = weapon["description"]
+        self.image = weapon["image"]
+        self.twoHanded = weapon["twoHanded"]
+        self.attack = weapon["attack"]
+        self.tier = weapon["tier"]
+        self.value = weapon["value"]
 
 # MISCELLANEOUS ITEMS (often lolz)
 

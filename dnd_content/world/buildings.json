@@ -1,0 +1,34 @@
+{
+  "city_entrance": {
+    "name": "City Entrance",
+    "description": "The entrance to the city.",
+
+    "tags": [
+      "entrance"
+    ]
+  },
+
+  "tavern": {
+    "name": "Tavern",
+    "description": "The god forsaken tavern.",
+
+    "tags": [
+    ]
+  },
+
+  "temple": {
+    "name": "Temple",
+    "description": "The temple of the gods. Forgot which ones.",
+
+    "tags": [
+    ]
+  },
+
+  "armory": {
+    "name": "Armory",
+    "description": "The Armory. You can buy weapons here.",
+
+    "tags": [
+    ]
+  }
+}

@@ -6,7 +6,8 @@
     "twoHanded":false,
     "attack":"1D4",
 
-    "tier":1
+    "tier":1,
+    "value":10
   },
   "wooden_sword":{
       "name":"Wooden Sword",
@@ -15,7 +16,8 @@
       "twoHanded":false,
       "attack":"1D6",
 
-      "tier":1
+      "tier":1,
+      "value":10
   },
   "artorias_sword": {
     "name":"Great Sword of Artorias",
@@ -24,6 +26,7 @@
     "twoHanded":true,
     "attack":"1D12",
 
-    "tier":5
+    "tier":5,
+    "value":1000
   }
 }

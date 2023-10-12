@@ -6,7 +6,8 @@
         "description": "Capital of the Crusader State.",
         "buildings": [
           "city_entrance",
-          "tavern"
+          "tavern",
+          "armory"
         ],
         "npcs": [
           "gandulf",

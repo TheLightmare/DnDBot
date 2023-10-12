@@ -55,9 +55,14 @@ class TradeUI(View):
 
         # scroll menu for selling
         self.sell_options = []
-        for item_id in self.character.inventory:
-            item = Item(item_id)
-            item.load()
+        for trade_good in self.character.inventory:
+            (category, item_id) = trade_good.split(":", 1)
+            if category == "item":
+                item = Item(item_id)
+                item.load()
+            if category == "weapon":
+                item = Weapon(item_id)
+                item.load()
             self.sell_options.append(SelectOption(label=item.name, value=item.id))
         if self.sell_options == []:
             self.sell_options.append(SelectOption(label="You have nothing to sell", value="none"))

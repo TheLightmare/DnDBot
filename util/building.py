@@ -6,15 +6,20 @@ from npc import NPC
 
 # abstract class for all buildings
 class Building():
-    def __init__(self, city, name, id):
+    def __init__(self, city, id):
         self.city = city
-        self.name = name
+        self.name = ""
         self.id = id
         self.description = ""
         self.npcs = []
         self.players = []
 
         self.tags = []
+
+    def load(self, dict):
+        self.name = dict["name"]
+        self.description = dict["description"]
+        self.tags = dict["tags"]
 
     def get_npc(self, id):
         for npc in self.npcs:
@@ -41,19 +46,3 @@ class Building():
         return self.players
 
 
-
-class CityEntrance(Building):
-    def __init__(self, city):
-        super().__init__(city, "City Entrance", "city_entrance")
-        self.description = "The entrance to the city. You can see the city walls and the gate. There are guards patrolling the area."
-        self.tags = ["entrance"]
-
-class Tavern(Building):
-    def __init__(self, city):
-        super().__init__(city, "Tavern", "tavern")
-        self.description = "The god forsaken tavern"
-
-class Temple(Building):
-    def __init__(self, city):
-        super().__init__(city, "Temple", "temple")
-        self.description = "The temple of a god, i forgot which one"
