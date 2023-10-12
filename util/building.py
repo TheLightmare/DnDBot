@@ -52,3 +52,8 @@ class Tavern(Building):
     def __init__(self, city):
         super().__init__(city, "Tavern", "tavern")
         self.description = "The god forsaken tavern"
+
+class Temple(Building):
+    def __init__(self, city):
+        super().__init__(city, "Temple", "temple")
+        self.description = "The temple of a god, i forgot which one"

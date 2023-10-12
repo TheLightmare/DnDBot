@@ -122,6 +122,8 @@ class World(Graph):
                     city.buildings.append(CityEntrance(city))
                 elif building_id == "tavern":
                     city.buildings.append(Tavern(city))
+                elif building_id == "temple":
+                    city.buildings.append(Temple(city))
 
             for npc_id in cities[city_json]["npcs"]:
                 npc = NPC()

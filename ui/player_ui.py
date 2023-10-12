@@ -123,50 +123,48 @@ class PlayerUI(View):
         if len(self.action_log) >= 100:
             self.action_log.pop(0)
 
-    # returns the action log as a string
-    def display_action_log(self):
+    # displays the action log in a code block
+    async def display_action_log(self):
         # display the action log in a code block
         log = "```ansi\n"
         maxrange = min(6, len(self.action_log))
         for i in range(maxrange):
             log += self.action_log[len(self.action_log) - maxrange - self.action_log_index + i] + "\n"
 
-        return log + "```"
+        log += "```"
+
+        embed = self.message.embeds[0]
+        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=log, inline=False)
+        await self.message.edit(embed=embed)
+
+
 
     async def scroll_up(self, interaction: discord.Interaction):
         if self.action_log_index + 6 < len(self.action_log):
             self.action_log_index += 1
             embed = self.message.embeds[0]
-            embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(),
-                               inline=False)
-            await interaction.response.edit_message(embed=embed)
-        else :
-            await interaction.response.defer()
+            await self.display_action_log()
+        await interaction.response.defer()
 
     async def scroll_down(self, interaction: discord.Interaction):
         if self.action_log_index > 0:
             self.action_log_index -= 1
             embed = self.message.embeds[0]
-            embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(),
-                               inline=False)
-            await interaction.response.edit_message(embed=embed)
-        else :
-            await interaction.response.defer()
+            await self.display_action_log()
+        await interaction.response.defer()
+
 
     async def scroll_top(self, interaction: discord.Interaction):
         if len(self.action_log) > 6:
             self.action_log_index = len(self.action_log) - 6
-        embed = self.message.embeds[0]
-        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(),
-                           inline=False)
-        await interaction.response.edit_message(embed=embed)
+        await self.display_action_log()
+        await interaction.response.defer()
+
 
     async def scroll_bottom(self, interaction: discord.Interaction):
         self.action_log_index = 0
-        embed = self.message.embeds[0]
-        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(),
-                           inline=False)
-        await interaction.response.edit_message(embed=embed)
+        await self.display_action_log()
+        await interaction.response.defer()
 
     async def update_actions_list(self):
         # update the action list
@@ -251,10 +249,8 @@ class PlayerUI(View):
             self.add_to_action_log(f"<You take a short rest>")
 
         # update the embed
-        message = self.message
-        embed = message.embeds[0]
-        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
-        await message.edit(embed=embed)
+        await self.display_action_log()
+
         await interaction.response.defer()
 
     # callback for the building select menu, only called when the player is moving
@@ -269,7 +265,7 @@ class PlayerUI(View):
         self.character.move_building(building)
         self.add_to_action_log(f"<You move to {building.name}>")
         embed = self.message.embeds[0]
-        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
+        await self.display_action_log()
 
         # remove the select menu
         message = self.message
@@ -303,8 +299,8 @@ class PlayerUI(View):
         embed = message.embeds[0]
 
         self.add_to_action_log(f"<You approach {npc.name}, and start a conversation...>")
-        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
-        await message.edit(embed=embed)
+        await self.display_action_log()
+
         await interaction.response.defer()
 
 
@@ -315,17 +311,10 @@ class PlayerUI(View):
         # ability check
         #TODO : add ability check
 
-        # get the message
-        message = self.message
-        embed = message.embeds[0]
-
         # get the spell result
         spell_result = spell.cast(self.character)
         self.add_to_action_log(f'<{spell_result}>')
-        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
-
-        # modify the embed
-        await message.edit(embed=embed)
+        await self.display_action_log()
 
         await interaction.response.defer()
 
@@ -337,10 +326,6 @@ class PlayerUI(View):
 
         # get the npc
         npc = self.talking_to
-
-        # get the message
-        message = self.message
-        embed = message.embeds[0]
 
         # get the dialogue
         (dialogue, is_end) = npc.talk()
@@ -355,8 +340,8 @@ class PlayerUI(View):
             self.add_to_action_log(f'{npc.name} : "{dialogue}"')
 
         # modify the embed
-        embed.set_field_at(4, name="=========] ACTION LOG [=========", value=self.display_action_log(), inline=False)
-        await message.edit(embed=embed)
+        await self.display_action_log()
+
         await interaction.response.defer()
 
     @tasks.loop(seconds=2)

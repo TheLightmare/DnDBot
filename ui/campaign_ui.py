@@ -137,6 +137,9 @@ class CampaignUI(View):
         for player_ui in self.player_ui_list:
             await player_ui.update_npc_list()
             await player_ui.update_building_list()
+            # add to the action log
+            player_ui.add_to_action_log(f"<The party moved to {location.name}>")
+            await player_ui.display_action_log()
 
         await interaction.response.defer()
 

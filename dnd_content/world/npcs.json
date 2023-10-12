@@ -106,5 +106,33 @@
     "spells": [
       "Fire Bolt"
     ]
+  },
+  "priestess": {
+    "name": "Priestess",
+    "description": "A priestess of the temple of Altdorf.",
+    "health": 100,
+    "max_health": 100,
+    "armor_class": 10,
+    "location": "altdorf",
+    "building": "temple",
+    "image": "priestess.png",
+    "is_merchant": false,
+    "gold": 1000,
+
+    "dialogue": [
+      "Greetings, I am the priestess of the temple of Altdorf.",
+      "I am here to help you in your quest.",
+      "Oh wait, there is no quest yet !"
+    ],
+    "default_dialogue": "Damn now i feel useless...",
+
+    "quest": null,
+
+    "inventory": [
+      "dirt"
+    ],
+    "spells": [
+      "Fire Bolt"
+    ]
   }
 }

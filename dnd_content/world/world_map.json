@@ -19,10 +19,12 @@
         "description": "Capital of the Empire.",
       "buildings": [
           "city_entrance",
-          "tavern"
+          "tavern",
+          "temple"
         ],
         "npcs": [
-          "hans"
+          "hans",
+          "priestess"
         ]
         },
     "middenheim": {
