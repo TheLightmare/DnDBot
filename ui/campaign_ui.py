@@ -107,10 +107,16 @@ class CampaignUI(View):
             return
         # check if the whole party is in the same location
         for character in self.characters:
-            if character.current_location != self.characters[0].current_location:
+            if character.current_building != self.characters[0].current_building:
                 await interaction.response.send_message("The whole party must be in the same location to move",
                                                         ephemeral=True, delete_after=5)
                 return
+
+        # check if the location is an entrance
+        if "entrance" not in self.host_character.current_building.tags:
+            await interaction.response.send_message("The party must be in an entrance to move", ephemeral=True,
+                                                    delete_after=5)
+            return
 
         # get the location
         location = self.world.get_node(interaction.data['values'][0])
