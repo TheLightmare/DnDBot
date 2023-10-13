@@ -6,13 +6,13 @@ import spell
 # preloads stuff into SelectOptions
 def load_weapons(max_tier) -> list:
     weapons = {}
-    with open(CONTENT_FOLDER + "items/" + "weapons.json", "r") as file:
+    with open(CONTENT_FOLDER + "items/" + "items.json", "r") as file:
         weapons = json.load(file)
     options = []
-    for element in weapons:
-        weapon = weapons[element]
-        if weapon["tier"] <= max_tier:
-            options.append(SelectOption(label=weapon["name"], value=weapon, description=weapon["description"]))
+    for weapon_id in weapons:
+        weapon = weapons[weapon_id]
+        if weapon["properties"]["tier"] <= max_tier and weapon["properties"]["equipable"]:
+            options.append(SelectOption(label=weapon["name"], value=weapon_id, description=weapon["description"]))
     return options
 
 def load_spells(max_level, character) -> list:
@@ -20,10 +20,10 @@ def load_spells(max_level, character) -> list:
     with open(CONTENT_FOLDER + "spells/" + "spells.json", "r") as file:
         spells = json.load(file)
     options = []
-    for element in spells:
-        spell = spells[element]
+    for spell_id in spells:
+        spell = spells[spell_id]
         if spell["level"] <= max_level and character.job in spell["available"]:
-            options.append(SelectOption(label=spell["name"] + f" lvl:{spell['level']}", value=spell, description=spell["description"]))
+            options.append(SelectOption(label=spell["name"] + f" lvl:{spell['level']}", value=spell_id, description=spell["description"]))
     return options
 
 def load_races() -> list:
@@ -31,9 +31,10 @@ def load_races() -> list:
     with open(CONTENT_FOLDER + "races/" + "races.json", "r") as file:
         races = json.load(file)
     options = []
-    for element in races:
-        race = races[element]
-        options.append(SelectOption(label=race["name"], value=race, description=race["description"]))
+    for race_id in races:
+        race = races[race_id]
+        options.append(SelectOption(label=race["name"], value=race_id, description=race["description"]))
+
     return options
 
 def load_classes() -> list:
@@ -41,9 +42,9 @@ def load_classes() -> list:
     with open(CONTENT_FOLDER + "classes/" + "classes.json", "r") as file:
         classes = json.load(file)
     options = []
-    for element in classes:
-        class_ = classes[element]
-        options.append(SelectOption(label=class_["name"], value=class_, description=class_["description"]))
+    for class_id in classes:
+        class_ = classes[class_id]
+        options.append(SelectOption(label=class_["name"], value=class_id, description=class_["description"]))
     return options
 
 

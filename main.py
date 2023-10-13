@@ -7,7 +7,7 @@ from discord.ext.commands import Bot
 
 #==== NECESSARY STUFF ====
 intents = discord.Intents.all()
-TOKEN = "Nzk2NjM2NDc1NjA0NDY3NzEy.GXNmLE.oeTqYvwR2UipbQBM3sMAkeEe61Axv2Z0IKva30"
+TOKEN = "Nzk2NjM2NDc1NjA0NDY3NzEy.GLyZSv.FInt2FjK0lXDH2kWPAzeGkjzsTk7WJ-SG2KJY8"
 bot = commands.Bot(command_prefix=',', intents=intents)
 
 asyncio.run(bot.load_extension("dnd"))

@@ -7,7 +7,12 @@
     "properties": {
       "value": 1,
       "durability": -1,
-      "max_stack": 10
+      "max_stack": 10,
+
+      "equipable": false,
+      "twoHanded": false,
+      "attack": "0",
+      "tier": 0
     }
   },
 

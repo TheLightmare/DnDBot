@@ -1,81 +1,4 @@
 {
-    "323028456977727488": {
-        "name": "h",
-        "age": "999",
-        "race": "Human",
-        "class": "Wizard",
-        "current_location": "Marienburg",
-        "current_building": "Tavern",
-        "level": 1,
-        "xp": 0,
-        "unspent_points": 10,
-        "gold": 9,
-        "max_hp": 10,
-        "current_hp": 10,
-        "armor_class": 10,
-        "proficiencies": [],
-        "proficiency_bonus": "2",
-        "stats": {
-            "strength": 10,
-            "dexterity": 10,
-            "constitution": 10,
-            "intelligence": 10,
-            "wisdom": 10,
-            "charisma": 10
-        },
-        "stat_modifiers": {
-            "strength": {
-                "race": 1
-            },
-            "dexterity": {
-                "race": 1
-            },
-            "constitution": {
-                "race": 1
-            },
-            "intelligence": {
-                "race": 1
-            },
-            "wisdom": {
-                "race": 1
-            },
-            "charisma": {
-                "race": 1
-            }
-        },
-        "features": [
-            "Spellcasting",
-            "Arcane Tradition"
-        ],
-        "inventory": [
-            "wooden_club",
-            "dirt"
-        ],
-        "spell_slots": [
-            3,
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        ],
-        "spells": [
-            [
-                "Acid Splash"
-            ],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ]
-    },
     "307930491762245642": {
         "name": "Asclios",
         "age": "20",
@@ -295,6 +218,84 @@
             ],
             [
                 "Blade Ward"
+            ],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
+    },
+    "323028456977727488": {
+        "name": "Ayendel",
+        "age": "35",
+        "race": "Human",
+        "class": "Warlock",
+        "current_location": "",
+        "current_building": "",
+        "level": 1,
+        "xp": 0,
+        "unspent_points": 10,
+        "gold": 10,
+        "max_hp": 10,
+        "current_hp": 10,
+        "armor_class": 10,
+        "proficiencies": [],
+        "proficiency_bonus": "2",
+        "stats": {
+            "strength": 10,
+            "dexterity": 10,
+            "constitution": 10,
+            "intelligence": 10,
+            "wisdom": 10,
+            "charisma": 10
+        },
+        "stat_modifiers": {
+            "strength": {
+                "race": 1
+            },
+            "dexterity": {
+                "race": 1
+            },
+            "constitution": {
+                "race": 1
+            },
+            "intelligence": {
+                "race": 1
+            },
+            "wisdom": {
+                "race": 1
+            },
+            "charisma": {
+                "race": 1
+            }
+        },
+        "features": [
+            "Otherworldly Patron",
+            "Pact Magic"
+        ],
+        "inventory": [
+            "wooden_sword"
+        ],
+        "spell_slots": [
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "spells": [
+            [
+                "eldritch_blast"
+            ],
+            [
+                "blade_ward"
             ],
             [],
             [],

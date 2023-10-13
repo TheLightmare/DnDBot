@@ -1,5 +1,5 @@
 {
-  "Human": {
+  "human": {
     "name": "Human",
     "description": "A human being.",
     "plural": "Humans",
@@ -12,7 +12,7 @@
       "charisma": 1
     }
   },
-  "Elf": {
+  "elf": {
     "name": "Elf",
     "description": "A tall, slender humanoid with pointelligenceed ears.",
     "plural": "Elves",
@@ -25,7 +25,7 @@
       "charisma": 0
     }
   },
-  "Dwarf": {
+  "dwarf": {
     "name": "Dwarf",
     "description": "A short, stocky humanoid with a long beard.",
     "plural": "Dwarves",
@@ -38,7 +38,7 @@
       "charisma": 0
     }
   },
-  "Halfling": {
+  "halfling": {
     "name": "Halfling",
     "description": "A short, nimble humanoid with hairy feet.",
     "plural": "Halflings",
@@ -51,7 +51,7 @@
       "charisma": 0
     }
   },
-  "Gnome": {
+  "gnome": {
     "name": "Gnome",
     "description": "A short, stocky humanoid with a long beard.",
     "plural": "Gnomes",
@@ -64,7 +64,7 @@
         "charisma": 0
     }
   },
-  "Half-Elf": {
+  "half_elf": {
     "name": "Half-Elf",
     "description": "A tall, slender humanoid with pointelligenceed ears.",
     "plural": "Half-Elves",
@@ -77,7 +77,7 @@
         "charisma": 2
     }
   },
-  "Half-Orc": {
+  "half_orc": {
     "name": "Half-Orc",
     "description": "A tall, muscular humanoid with green skin.",
     "plural": "Half-Orcs",
@@ -90,7 +90,7 @@
         "charisma": 0
     }
   },
-  "Tiefling": {
+  "tiefling": {
     "name": "Tiefling",
     "description": "A tall, slender humanoid with horns and dark skin.",
     "plural": "Tieflings",
@@ -103,7 +103,7 @@
         "charisma": 2
     }
   },
-  "Dragonborn": {
+  "dragonborn": {
     "name": "Dragonborn",
     "description": "A tall, muscular humanoid with scaly skin and a tail.",
     "plural": "Dragonborn",

@@ -4,6 +4,7 @@ from util.settings import *
 
 class Spell():
     def __init__(self):
+        self.id = None
         self.name = None
         self.level = None
         self.description = None
@@ -17,6 +18,7 @@ class Spell():
         with open(CONTENT_FOLDER + "spells/" + "spells.json", 'r') as f:
             spells = json.load(f)
         spell = spells[id]
+        self.id = id
         self.name = spell["name"]
         self.level = spell["level"]
         self.description = spell["description"]

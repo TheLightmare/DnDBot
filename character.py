@@ -222,9 +222,9 @@ class Character():
             #load spells
             spell_tiers = character["spells"]
             for tier in range(len(spell_tiers)):
-                for spell_name in spell_tiers[tier]:
+                for spell_id in spell_tiers[tier]:
                     spell = Spell()
-                    spell.load(spell_name)
+                    spell.load(spell_id)
                     self.spells[tier].append(spell)
             #load level
             self.level = character["level"]
@@ -265,10 +265,10 @@ class Character():
         with open(CHARACTER_FOLDER + 'characters.json', 'r') as f:
             characters = json.load(f)
 
-        spell_names = [[], [], [], [], [], [], [], [], []]
+        spell_ids = [[], [], [], [], [], [], [], [], []]
         for tier in range(len(self.spells)):
             for spell in self.spells[tier]:
-                spell_names[tier].append(spell.name)
+                spell_ids[tier].append(spell.id)
 
         current_location_str = ""
         if self.current_location is not None:
@@ -304,7 +304,7 @@ class Character():
 
             "inventory": self.inventory,
             "spell_slots": self.spell_slots,
-            "spells": spell_names
+            "spells": spell_ids
         }
 
         with open(CHARACTER_FOLDER + 'characters.json', 'w') as f:
