@@ -1,5 +1,5 @@
 {
-  "Eldritch Blast": {
+  "eldritch_blast": {
     "name": "Eldritch Blast",
     "description": "",
     "level": 0,
@@ -9,7 +9,7 @@
     ]
   },
 
-  "Acid Splash": {
+  "acid_splash": {
     "name": "Acid Splash",
     "description": "",
     "level": 0,
@@ -20,7 +20,7 @@
     ]
 
   },
-  "Fire Bolt": {
+  "fire_bolt": {
     "name": "Fire Bolt",
     "description": "",
     "level": 0,
@@ -32,7 +32,7 @@
         "Wizard"
     ]
   },
-    "Blade Ward": {
+    "blade_ward": {
         "name": "Blade Ward",
         "description": "",
         "level": 1,

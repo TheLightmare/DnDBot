@@ -55,14 +55,9 @@ class TradeUI(View):
 
         # scroll menu for selling
         self.sell_options = []
-        for trade_good in self.character.inventory:
-            (category, item_id) = trade_good.split(":", 1)
-            if category == "item":
-                item = Item(item_id)
-                item.load()
-            if category == "weapon":
-                item = Weapon(item_id)
-                item.load()
+        for item_id in self.character.inventory:
+            item = Item(item_id)
+            item.load()
             self.sell_options.append(SelectOption(label=item.name, value=item.id))
         if self.sell_options == []:
             self.sell_options.append(SelectOption(label="You have nothing to sell", value="none"))
@@ -92,7 +87,7 @@ class TradeUI(View):
         # check if player has enough gold
         total_cost = 0
         for item in self.buy_items:
-            total_cost += item.value
+            total_cost += item.properties["value"]
         if self.character.gold < total_cost:
             await interaction.response.send_message("You do not have enough gold to buy these items.", ephemeral=True, delete_after=5)
             return
@@ -122,7 +117,7 @@ class TradeUI(View):
 
         # remove items from player inventory
         for item in self.sell_items:
-            self.character.inventory.remove(item)
+            self.character.inventory.remove(item.id)
             self.character.save()
 
         # add items to npc inventory
@@ -132,7 +127,7 @@ class TradeUI(View):
         # add gold to player
         total_cost = 0
         for item in self.sell_items:
-            total_cost += item.value
+            total_cost += item.properties["value"]
         self.character.gold += total_cost
 
         # clear the sell items
@@ -158,7 +153,9 @@ class TradeUI(View):
     async def sell_select(self, interaction: discord.Interaction):
         # get the selected items
         self.sell_items = []
-        for item in interaction.data["values"]:
-            self.sell_items.append(Item.load(item))
+        for item_id in interaction.data["values"]:
+            item = Item(item_id)
+            item.load()
+            self.sell_items.append(item)
 
         await interaction.response.defer()

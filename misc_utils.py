@@ -160,8 +160,14 @@ def load_races():
 
 # function to load weapons.json in a python list
 def load_weapons():
-    with open(CONTENT_FOLDER + "items/weapons.json", 'r') as f:
+    with open(CONTENT_FOLDER + "items/items.json", 'r') as f:
         weapons = json.load(f)
+    # remove non-weapons
+    for weapon in weapons:
+        if not weapon["properties"]["equipable"] and weapon["properties"]["tier"] > 1:
+            weapons.remove(weapon)
+
+    print(weapons)
     return weapons
 
 # function to load spells.json in a python list

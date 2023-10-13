@@ -3,11 +3,66 @@
     "name": "Dirt",
     "description": "A bunch of dirt.",
     "image": "dirt.png",
-    "value": 1,
-    "durability": -1,
-    "max_stack": 1,
-    "properties": {
 
+    "properties": {
+      "value": 1,
+      "durability": -1,
+      "max_stack": 10
+    }
+  },
+
+
+
+  "wooden_club":{
+    "name":"Wooden Club",
+    "description":"a sturdy piece of wood",
+    "image":"",
+
+    "properties":{
+      "value":10,
+      "durability":10,
+      "max_stack":1,
+
+      "equipable":true,
+      "twoHanded":false,
+      "attack":"1D4",
+
+      "tier":1
+    }
+  },
+
+  "wooden_sword":{
+      "name":"Wooden Sword",
+      "description":"a very basic sword made of wood",
+      "image":"",
+
+      "properties":{
+        "value":20,
+        "durability":15,
+        "max_stack":1,
+
+        "equipable":true,
+        "twoHanded":false,
+        "attack":"1D6",
+
+        "tier":1
+      }
+  },
+
+  "artorias_sword": {
+    "name":"Great Sword of Artorias",
+    "description":"a sword of legend wielded by the great Artorias, the Abysswalker.",
+    "image":"",
+
+    "properties":{
+      "value":1000,
+      "durability":100,
+      "max_stack":1,
+
+      "twoHanded":true,
+      "attack":"2D10",
+
+      "tier":5
     }
   }
 }

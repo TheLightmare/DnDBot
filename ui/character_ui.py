@@ -12,7 +12,7 @@ def load_weapons(max_tier) -> list:
     for element in weapons:
         weapon = weapons[element]
         if weapon["tier"] <= max_tier:
-            options.append(SelectOption(label=weapon["name"], value=weapon["name"], description=weapon["description"]))
+            options.append(SelectOption(label=weapon["name"], value=weapon, description=weapon["description"]))
     return options
 
 def load_spells(max_level, character) -> list:
@@ -23,7 +23,7 @@ def load_spells(max_level, character) -> list:
     for element in spells:
         spell = spells[element]
         if spell["level"] <= max_level and character.job in spell["available"]:
-            options.append(SelectOption(label=spell["name"] + f" lvl:{spell['level']}", value=spell["name"], description=spell["description"]))
+            options.append(SelectOption(label=spell["name"] + f" lvl:{spell['level']}", value=spell, description=spell["description"]))
     return options
 
 def load_races() -> list:
@@ -33,7 +33,7 @@ def load_races() -> list:
     options = []
     for element in races:
         race = races[element]
-        options.append(SelectOption(label=race["name"], value=race["name"], description=race["description"]))
+        options.append(SelectOption(label=race["name"], value=race, description=race["description"]))
     return options
 
 def load_classes() -> list:
@@ -43,7 +43,7 @@ def load_classes() -> list:
     options = []
     for element in classes:
         class_ = classes[element]
-        options.append(SelectOption(label=class_["name"], value=class_["name"], description=class_["description"]))
+        options.append(SelectOption(label=class_["name"], value=class_, description=class_["description"]))
     return options
 
 
