@@ -50,7 +50,6 @@ class City(Node):
         return None
 
 
-
 class Road(Edge):
     def __init__(self, name, id, node1, node2):
         super().__init__(name, id, node1, node2)
@@ -67,6 +66,8 @@ class World(Graph):
         super().__init__()
         # list of cities, separate from the graph
         self.cities = []
+        # list of roads, separate from the graph
+        self.roads = []
 
         self.load()
         self.starting_location = self.get_node("marienburg")
@@ -110,6 +111,7 @@ class World(Graph):
         # clear the graph
         self.clear()
         self.cities = []
+        self.roads = []
 
         cities = world["cities"]
         roads = world["roads"]
@@ -136,13 +138,24 @@ class World(Graph):
             self.cities.append(city)
             self.add_node(city)
 
-
+        # load roads
         for road_json in roads:
-            road = Road(road_json, roads[road_json]["name"], roads[road_json]["path"][0], roads[road_json]["path"][1])
+            # get starting and ending cities
+            node1 = self.get_node(roads[road_json]["path"][0])
+            node2 = self.get_node(roads[road_json]["path"][1])
+            road = Road(roads[road_json]["name"], road_json, node1, node2)
             road.set_distance(roads[road_json]["distance"])
 
+            self.roads.append(road)
             self.add_edge(road)
 
 
+        # add neighbors to cities
+        for city in self.cities:
+            for road in self.roads:
+                if road.node1.id == city.id:
+                    city.add_neighbor(road.node2)
+                elif road.node2.id == city.id:
+                    city.add_neighbor(road.node1)
 
 

@@ -1,6 +1,6 @@
 from discord.ui import Modal, View, TextInput
 from discord.components import SelectOption
-from misc_utils import *
+from util.misc_utils import *
 import spell
 
 # preloads stuff into SelectOptions

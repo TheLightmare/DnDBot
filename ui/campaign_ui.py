@@ -1,9 +1,9 @@
 from discord.components import SelectOption
 from discord.ui import Button, View, Select
 
-from misc_utils import *
+from util.misc_utils import *
 from ui.player_ui import PlayerUI
-from world import World
+from world.world import World
 
 INTERACTION_PRIVATE_MESSAGES = {}
 
@@ -47,18 +47,20 @@ class CampaignUI(View):
         get_personal_ui.callback = self.get_personal_ui
 
         move_party_options = []
-        for location in self.world.cities:
-            move_party_options.append(SelectOption(label=location.name, value=location.id, description=""))
+        for location in self.host_character.current_location.neighbors:
+            road = self.world.get_edge_between(self.host_character.current_location, location)
+            description = f'by {road.name}, {road.distance} km away'
+            move_party_options.append(SelectOption(label=location.name, value=location.id, description=description))
 
-        move_party = Select(
+        self.select_move_party = Select(
             placeholder="Select where to move party",
             options=move_party_options,
             min_values=1,
             max_values=1
         )
-        move_party.callback = self.move_party
+        self.select_move_party.callback = self.move_party
 
-        self.add_item(move_party)
+        self.add_item(self.select_move_party)
         self.add_item(get_personal_ui)
 
 
@@ -132,13 +134,21 @@ class CampaignUI(View):
             character.current_building = character.current_location.buildings[0]
             character.current_building.add_player(character)
 
+        # update party destination selection
+        move_party_options = []
+        for neighbor in self.host_character.current_location.neighbors:
+            road = self.world.get_edge_between(self.host_character.current_location, neighbor)
+            description = f'by {road.name}, {road.distance} km away'
+            move_party_options.append(SelectOption(label=neighbor.name, value=neighbor.id, description=description))
+        self.select_move_party.options = move_party_options
+
         # update the embed
         embed = interaction.message.embeds[0]
         embed.set_field_at(0, name="CURRENT LOCATION", value=f"__{location.name}__ : {location.description}",
                            inline=True)
 
         # modify the message
-        await interaction.message.edit(embed=embed)
+        await interaction.message.edit(embed=embed, view=self)
 
         # update players npc and building lists
         for player_ui in self.player_ui_list:

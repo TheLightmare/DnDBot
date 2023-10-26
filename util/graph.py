@@ -54,3 +54,8 @@ class Graph():
                 return edge
         return None
 
+    def get_edge_between(self, node1, node2):
+        for edge in self.edges:
+            if edge.node1 == node1 and edge.node2 == node2 or edge.node1 == node2 and edge.node2 == node1:
+                return edge
+        return None

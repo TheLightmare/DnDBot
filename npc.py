@@ -36,9 +36,6 @@ class NPC():
         # is merchant?
         self.is_merchant = False
 
-        # current dialogue line
-        self.current_line = 0
-
 
     def load(self, id):
         with open(CONTENT_FOLDER + "world/" + "npcs.json", 'r') as f:
@@ -62,15 +59,15 @@ class NPC():
         self.default_dialogue = npc["default_dialogue"]
 
 
-    def talk(self):
+    def talk(self, current_line):
         if self.dialogue is None:
             return (self.default_dialogue, True)
         else:
-            if self.current_line >= len(self.dialogue):
+            if current_line >= len(self.dialogue):
                 #self.current_line = 0
                 return (self.default_dialogue, True)
-            text = self.dialogue[self.current_line]
-            self.current_line += 1
+            text = self.dialogue[current_line]
+            current_line += 1
             return (text, False)
 
     def reset_dialogue(self):

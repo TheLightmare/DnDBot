@@ -1,4 +1,4 @@
-from world import World
+from world.world import World
 
 # class to manage time, turn based events, weather, etc.
 class TimeManager():

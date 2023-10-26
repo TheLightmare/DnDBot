@@ -305,5 +305,80 @@
             [],
             []
         ]
+    },
+    "474877882045431808": {
+        "name": "Dudur Hardur",
+        "age": "99",
+        "race": "Half-Orc",
+        "class": "Wizard",
+        "current_location": "Altdorf",
+        "current_building": "Temple",
+        "level": 1,
+        "xp": 0,
+        "unspent_points": 0,
+        "gold": 8,
+        "max_hp": 10,
+        "current_hp": 10,
+        "armor_class": 10,
+        "proficiencies": [],
+        "proficiency_bonus": "2",
+        "stats": {
+            "strength": 17,
+            "dexterity": 7,
+            "constitution": 15,
+            "intelligence": 4,
+            "wisdom": 12,
+            "charisma": 15
+        },
+        "stat_modifiers": {
+            "strength": {
+                "race": 2
+            },
+            "dexterity": {
+                "race": 0
+            },
+            "constitution": {
+                "race": 1
+            },
+            "intelligence": {
+                "race": 0
+            },
+            "wisdom": {
+                "race": 0
+            },
+            "charisma": {
+                "race": 0
+            }
+        },
+        "features": [
+            "Spellcasting",
+            "Arcane Tradition"
+        ],
+        "inventory": [
+            "dirt",
+            "dirt"
+        ],
+        "spell_slots": [
+            3,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "spells": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
     }
 }

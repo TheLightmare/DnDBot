@@ -1,7 +1,7 @@
 import json
 
-import misc_utils
-import world
+from util import misc_utils
+from world import world
 from util.settings import *
 import discord
 
@@ -202,7 +202,6 @@ class Character():
 
         # load world
         self.world = world.World()
-        self.world.load()
 
         if str(self.author.id) in characters:
             # load character

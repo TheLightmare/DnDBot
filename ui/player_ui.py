@@ -1,12 +1,11 @@
 import random
 
-import discord
-from discord.ui import Button, View, Select, UserSelect, Modal, TextInput
+from discord.ui import Button, View, Select
 from discord.components import SelectOption
-from misc_utils import *
+from util.misc_utils import *
 from character import Character
 from ui.trade_ui import TradeUI
-from world import World
+from world.world import World
 from util.dice import Dice
 
 class PlayerUI(View):
@@ -24,6 +23,8 @@ class PlayerUI(View):
 
         # npc the player is talking to
         self.talking_to = None
+        # index of the current dialogue line for every npc
+        self.npc_dialogue_indexes = []
 
         # action log
         self.action_log = []
