@@ -148,6 +148,11 @@ class LobbyUI(View):
         # remove the player from the thread
         await self.thread.remove_user(interaction.user)
 
+        # update the embed
+        embed = interaction.message.embeds[0]
+        embed.set_field_at(1, name="Players", value=" ".join([player.mention for player in self.players]), inline=False)
+        await interaction.message.edit(embed=embed)
+
         # send a message in the thread to the player
         await self.thread.send(f"{interaction.user} left the game !", delete_after=10)
 
