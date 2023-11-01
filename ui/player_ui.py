@@ -24,7 +24,7 @@ class PlayerUI(View):
         # npc the player is talking to
         self.talking_to = None
         # index of the current dialogue line for every npc
-        self.npc_dialogue_indexes = []
+        self.npc_dialogue_indexes = {}
 
         # action log
         self.action_log = []
@@ -292,6 +292,9 @@ class PlayerUI(View):
         # set the npc you interact with
         self.talking_to = npc
 
+        # add the npc to the dialogue index
+        self.npc_dialogue_indexes[npc.id] = 0
+
         # update the contextual actions
         await self.update_actions_list()
 
@@ -328,8 +331,11 @@ class PlayerUI(View):
         # get the npc
         npc = self.talking_to
 
-        # get the dialogue
-        (dialogue, is_end) = npc.talk()
+        # get the dialogue and the new index
+        new_index = 0
+        (dialogue, is_end, new_index) = npc.talk(self.npc_dialogue_indexes[npc.id])
+        self.npc_dialogue_indexes[npc.id] = new_index
+
         if is_end:
             self.add_to_action_log(f"<You finished talking to {npc.name}>")
             self.talking_to = None

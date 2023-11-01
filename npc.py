@@ -61,14 +61,14 @@ class NPC():
 
     def talk(self, current_line):
         if self.dialogue is None:
-            return (self.default_dialogue, True)
+            return (self.default_dialogue, True, current_line)
         else:
             if current_line >= len(self.dialogue):
                 #self.current_line = 0
-                return (self.default_dialogue, True)
+                return (self.default_dialogue, True, current_line)
             text = self.dialogue[current_line]
             current_line += 1
-            return (text, False)
+            return (text, False, current_line)
 
     def reset_dialogue(self):
         self.current_line = 0
