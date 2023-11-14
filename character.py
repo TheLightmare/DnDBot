@@ -109,9 +109,11 @@ class Character():
             if spells[spell]["available"] == job_name:
                 self.available_spells.append(spell)
 
+
     # basically a warcrime but it works
     # you must increase the level before applying this function
     def apply_level_up(self):
+        # load classes
         with open(CONTENT_FOLDER + 'classes/' + 'classes.json', 'r') as f:
             classes = json.load(f)
         job = classes[self.job]

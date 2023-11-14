@@ -17,7 +17,7 @@ class Dnd(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Cog loaded successfully')
+        print('DnD Cog loaded successfully')
 
     #command to register a character
     @app_commands.command(name="register", description="Register a new character")
