@@ -16,7 +16,22 @@
     }
   },
 
+  "end_of_everything": {
+    "name": "End of Everything",
+    "description": "The end of everything.",
+    "image": "end_of_everything.png",
 
+    "properties": {
+      "value": 1,
+      "durability": -1,
+      "max_stack": 1,
+
+      "equipable": false,
+      "twoHanded": false,
+      "attack": "0",
+      "tier": 0
+    }
+  },
 
   "wooden_club":{
     "name":"Wooden Club",

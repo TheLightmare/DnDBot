@@ -1,167 +1,144 @@
 {
-  "gandulf": {
-    "name": "Gandulf",
-    "description": "A strange wizard.",
-    "health": 100,
-    "max_health": 100,
-    "armor_class": 10,
-    "location": "marienburg",
-    "building": "city_entrance",
-    "image": "gandulf.png",
-    "is_merchant": false,
-    "gold": 1000,
-
-    "dialogue": [
-      "Hello, I am Gandulf the wizard !",
-      "I am too lazy to introduce lore and shit...",
-      "You better move your ass and find by yourself"
-    ],
-    "default_dialogue": "Bruh, still here ?",
-
-    "quest": null,
-
-    "inventory": [
-      "end_of_everything"
-    ],
-    "spells": [
-      "fire_bolt"
-    ]
-  },
-
-  "bartender": {
-    "name": "Bartender",
-    "description": "the owner of the Tavern.",
-    "health": 100,
-    "max_health": 100,
-    "armor_class": 10,
-    "location": "marienburg",
-    "building": "tavern",
-    "image": "bartender.png",
-    "is_merchant": true,
-    "gold": 9999,
-
-    "dialogue": [
-      "Hello, stranger. What can i serve you ?"
-    ],
-    "default_dialogue": "...What can i serve you ?",
-
-    "quest": null,
-
-    "inventory": [
-      "dirt"
-    ],
-
-    "spells": []
-  },
-
-  "ramon": {
-    "name": "Ramon",
-    "description": "Don't ask about Ramon.",
-    "health": 100,
-    "max_health": 100,
-    "armor_class": 10,
-    "location": "marienburg",
-    "building": "tavern",
-    "image": "ramon.png",
-    "is_merchant": false,
-    "gold": 1,
-
-    "dialogue": [
-      "dflojhgfdkjdwmjkgflhkjwshrwdgxkjljbxfghwldxm",
-      "dfflkjghxlfkhlkdwxfhglmkwxdhr",
-      "dfwhwdlkfjkjwxglfdjblwxhdrhwoiuuvhgbkfh"
-    ],
-    "default_dialogue": "Huh ?",
-
-    "quest": null,
-
-    "inventory": [],
-    "spells": []
-  },
-
-  "hans": {
-    "name": "Hans",
-    "description": "An even stranger wizard.",
-    "health": 100,
-    "max_health": 100,
-    "armor_class": 10,
-    "location": "altdorf",
-    "building": "city_entrance",
-    "image": "hans.png",
-    "is_merchant": false,
-    "gold": 1000,
-
-    "dialogue": [
-      "Hello, I am Hans the wizard !",
-      "Have you seen Gandulf ?",
-      "I am looking for him since 3 years !"
-    ],
-    "default_dialogue": "That old fart better still be around !",
-
-    "quest": null,
-
-    "inventory": [
-      "end_of_everything"
-    ],
-    "spells": [
-      "fire_bolt"
-    ]
-  },
-  "priestess": {
-    "name": "Priestess",
-    "description": "A priestess of the temple of Altdorf.",
-    "health": 100,
-    "max_health": 100,
-    "armor_class": 10,
-    "location": "altdorf",
-    "building": "temple",
-    "image": "priestess.png",
-    "is_merchant": false,
-    "gold": 1000,
-
-    "dialogue": [
-      "Greetings, I am the priestess of the temple of Altdorf.",
-      "I am here to help you in your quest.",
-      "Oh wait, there is no quest yet !"
-    ],
-    "default_dialogue": "Damn now i feel useless...",
-
-    "quest": null,
-
-    "inventory": [
-      "dirt"
-    ],
-    "spells": [
-      "fire_bolt"
-    ]
-  },
-
-  "weaponsmith": {
-    "name": "Weaponsmith",
-    "description": "A weaponsmith of the city of Marienburg.",
-    "health": 100,
-    "max_health": 100,
-    "armor_class": 10,
-    "location": "marienburg",
-    "building": "armory",
-    "image": "weaponsmith.png",
-    "is_merchant": true,
-    "gold": 1000,
-
-    "dialogue": [
-      "Greetings, I am the weaponsmith of the city of Marienburg.",
-      "I am here to help you in your quest.",
-      "Oh wait, there is no quest yet !"
-    ],
-    "default_dialogue": "Damn now i feel useless...",
-
-    "quest": null,
-
-    "inventory": [
-      "artorias_sword"
-    ],
-    "spells": [
-
-    ]
-  }
+    "gandulf": {
+        "name": "Gandulf",
+        "description": "A strange wizard.",
+        "health": 100,
+        "max_health": 100,
+        "armor_class": 10,
+        "location": "marienburg",
+        "building": "city_entrance",
+        "image": "gandulf.png",
+        "is_merchant": false,
+        "gold": 1000,
+        "dialogue": [
+            "Hello, I am Gandulf the wizard !",
+            "I am too lazy to introduce lore and shit...",
+            "You better move your ass and find by yourself"
+        ],
+        "default_dialogue": "Bruh, still here ?",
+        "quest": null,
+        "inventory": [
+            "end_of_everything"
+        ],
+        "spells": [
+            "fire_bolt"
+        ]
+    },
+    "bartender": {
+        "name": "Bartender",
+        "description": "the owner of the Tavern.",
+        "health": 100,
+        "max_health": 100,
+        "armor_class": 10,
+        "location": "marienburg",
+        "building": "tavern",
+        "image": "bartender.png",
+        "is_merchant": true,
+        "gold": 9999,
+        "dialogue": [
+            "Hello, stranger. What can i serve you ?"
+        ],
+        "default_dialogue": "...What can i serve you ?",
+        "quest": null,
+        "inventory": [
+            "dirt"
+        ],
+        "spells": []
+    },
+    "ramon": {
+        "name": "Ramon",
+        "description": "Don't ask about Ramon.",
+        "health": 100,
+        "max_health": 100,
+        "armor_class": 10,
+        "location": "marienburg",
+        "building": "tavern",
+        "image": "ramon.png",
+        "is_merchant": false,
+        "gold": 1,
+        "dialogue": [
+            "dflojhgfdkjdwmjkgflhkjwshrwdgxkjljbxfghwldxm",
+            "dfflkjghxlfkhlkdwxfhglmkwxdhr",
+            "dfwhwdlkfjkjwxglfdjblwxhdrhwoiuuvhgbkfh"
+        ],
+        "default_dialogue": "Huh ?",
+        "quest": null,
+        "inventory": [],
+        "spells": []
+    },
+    "hans": {
+        "name": "Hans",
+        "description": "An even stranger wizard.",
+        "health": 100,
+        "max_health": 100,
+        "armor_class": 10,
+        "location": "altdorf",
+        "building": "city_entrance",
+        "image": "hans.png",
+        "is_merchant": false,
+        "gold": 1000,
+        "dialogue": [
+            "Hello, I am Hans the wizard !",
+            "Have you seen Gandulf ?",
+            "I am looking for him since 3 years !"
+        ],
+        "default_dialogue": "That old fart better still be around !",
+        "quest": null,
+        "inventory": [
+            "end_of_everything"
+        ],
+        "spells": [
+            "fire_bolt"
+        ]
+    },
+    "priestess": {
+        "name": "Priestess",
+        "description": "A priestess of the temple of Altdorf.",
+        "health": 100,
+        "max_health": 100,
+        "armor_class": 10,
+        "location": "altdorf",
+        "building": "temple",
+        "image": "priestess.png",
+        "is_merchant": false,
+        "gold": 1000,
+        "dialogue": [
+            "Greetings, I am the priestess of the temple of Altdorf.",
+            "I am here to help you in your quest.",
+            "Oh wait, there is no quest yet !"
+        ],
+        "default_dialogue": "Damn now i feel useless...",
+        "quest": null,
+        "inventory": [
+            "dirt"
+        ],
+        "spells": [
+            "fire_bolt"
+        ]
+    },
+    "weaponsmith": {
+        "name": "Weaponsmith",
+        "description": "A weaponsmith of the city of Marienburg.",
+        "health": 100,
+        "max_health": 100,
+        "armor_class": 10,
+        "location": "marienburg",
+        "building": "armory",
+        "image": "weaponsmith.png",
+        "is_merchant": true,
+        "gold": 1000,
+        "dialogue": [
+            "Greetings, I am the weaponsmith of the city of Marienburg.",
+            "I am here to help you in your quest.",
+            "Oh wait, there is no quest yet !"
+        ],
+        "default_dialogue": "Damn now i feel useless...",
+        "quest": null,
+        "inventory": [
+            "artorias_sword",
+            "end_of_everything",
+            "dirt"
+        ],
+        "spells": []
+    }
 }

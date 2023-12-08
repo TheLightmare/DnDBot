@@ -58,6 +58,28 @@ class NPC():
         self.dialogue = npc["dialogue"]
         self.default_dialogue = npc["default_dialogue"]
 
+    def save(self):
+        with open(CONTENT_FOLDER + "world/" + "npcs.json", 'r') as f:
+            npcs = json.load(f)
+        npc = npcs[self.id]
+        npc["name"] = self.name
+        npc["description"] = self.description
+        npc["health"] = self.health
+        npc["max_health"] = self.max_health
+        npc["armor_class"] = self.armor_class
+        npc["location"] = self.location
+        npc["building"] = self.building
+        npc["image"] = self.image
+        npc["quest"] = self.quest
+        npc["spells"] = self.spells
+        npc["inventory"] = self.inventory
+        npc["gold"] = self.gold
+        npc["is_merchant"] = self.is_merchant
+        npc["dialogue"] = self.dialogue
+        npc["default_dialogue"] = self.default_dialogue
+        npcs[self.id] = npc
+        with open(CONTENT_FOLDER + "world/" + "npcs.json", 'w') as f:
+            json.dump(npcs, f, indent=4)
 
     def talk(self, current_line):
         if self.dialogue is None:

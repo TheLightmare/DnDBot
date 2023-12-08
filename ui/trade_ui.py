@@ -115,20 +115,18 @@ class TradeUI(View):
             await interaction.response.send_message("You have not selected any items to sell.", ephemeral=True, delete_after=5)
             return
 
-        # remove items from player inventory
+        # remove items from player inventory and add gold
+        total_cost = 0
         for item in self.sell_items:
             self.character.inventory.remove(item.id)
-            self.character.save()
+            total_cost += item.properties["value"]
+        self.character.gold += total_cost
+        self.character.save()
 
         # add items to npc inventory
         for item in self.sell_items:
-            self.npc.inventory.append(item)
-
-        # add gold to player
-        total_cost = 0
-        for item in self.sell_items:
-            total_cost += item.properties["value"]
-        self.character.gold += total_cost
+            self.npc.inventory.append(item.id)
+            self.npc.save()
 
         # clear the sell items
         self.sell_items = []

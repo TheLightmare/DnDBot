@@ -233,12 +233,12 @@
         "age": "35",
         "race": "Human",
         "class": "Warlock",
-        "current_location": "",
-        "current_building": "",
+        "current_location": "Marienburg",
+        "current_building": "Armory",
         "level": 1,
         "xp": 0,
         "unspent_points": 10,
-        "gold": 10,
+        "gold": 11,
         "max_hp": 10,
         "current_hp": 10,
         "armor_class": 10,
@@ -277,8 +277,7 @@
             "Pact Magic"
         ],
         "inventory": [
-            "wooden_sword",
-            "end_of_everything"
+            "wooden_sword"
         ],
         "spell_slots": [
             1,

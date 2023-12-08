@@ -131,7 +131,6 @@ class PlayerUI(View):
         maxrange = min(6, len(self.action_log))
         for i in range(maxrange):
             log += self.action_log[len(self.action_log) - maxrange - self.action_log_index + i] + "\n"
-
         log += "```"
 
         embed = self.message.embeds[0]
@@ -226,8 +225,6 @@ class PlayerUI(View):
         elif action == "demand_quest":
             self.add_to_action_log(npc.give_quest())
         elif action == "demand_trade":
-            # create the trade message
-            # TODO: this does not work for some reason
             await interaction.response.send_message(
                 f"{self.character.name} offers {npc.name} a trade",
                 view=TradeUI(self.player, self.character, npc, self),
