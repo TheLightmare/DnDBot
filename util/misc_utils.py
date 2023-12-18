@@ -40,8 +40,10 @@ async def create_character(bot, thread, author):
             for j in range(character.spell_slots[i]):
                 value += f"- *Choose spell*\n"
             embed.set_field_at(i, name=f"Level {i}", value=value, inline=False)
-    spells_message = await thread.send(embed = embed, view = character_ui.SpellsUI(character))
-
+    if character.spell_slots[0] != 0:
+        spells_message = await thread.send(embed = embed, view = character_ui.SpellsUI(character))
+    else:
+        spells_message = await thread.send(embed = embed)
 
     # create stats embed
     embed = discord.Embed(title="Stat distribution", description="Distribute your stats", color=0x00ff00)

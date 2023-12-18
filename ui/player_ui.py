@@ -306,6 +306,11 @@ class PlayerUI(View):
 
 
     async def cast_spell(self, interaction: discord.Interaction):
+        # check if spell is none
+        if interaction.data["values"][0] == "No Spells":
+            await interaction.response.defer()
+            return
+
         # get the spell
         spell = self.character.get_spell(interaction.data["values"][0])
 

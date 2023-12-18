@@ -82,5 +82,48 @@
         ]
       }
     ]
+  },
+  "Paladin":{
+    "name": "Paladin",
+    "description": "A holy warrior bound to a sacred oath",
+
+    "levelup_pattern": [
+      {
+        "proficiency_bonus": "2",
+        "features": [
+            "Divine Sense"
+        ],
+        "spell_slots": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+      },
+      {
+        "proficiency_bonus": "2",
+        "features": [
+            "Fighting Style",
+            "Spellcasting",
+            "Divine Smite"
+        ],
+        "spell_slots": [
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+      }
+    ]
   }
 }

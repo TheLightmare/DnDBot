@@ -189,7 +189,11 @@ class EquipmentUI(View):
         embed = interaction.message.embeds[0]
         #modify embed
         embed.set_field_at(0, name="Equipment", value=self.selected_equipment, inline=False)
-        self.character.inventory.append(self.selected_equipment)
+
+        # check if the character already has the equipment
+        if self.selected_equipment not in self.character.inventory:
+            self.character.inventory.append(self.selected_equipment)
+
         #send embed
         await interaction.message.edit(embed=embed)
 

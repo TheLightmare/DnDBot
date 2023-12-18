@@ -228,84 +228,6 @@
             []
         ]
     },
-    "323028456977727488": {
-        "name": "Ayendel",
-        "age": "35",
-        "race": "Human",
-        "class": "Warlock",
-        "current_location": "Marienburg",
-        "current_building": "Armory",
-        "level": 1,
-        "xp": 0,
-        "unspent_points": 10,
-        "gold": 11,
-        "max_hp": 10,
-        "current_hp": 10,
-        "armor_class": 10,
-        "proficiencies": [],
-        "proficiency_bonus": "2",
-        "stats": {
-            "strength": 10,
-            "dexterity": 10,
-            "constitution": 10,
-            "intelligence": 10,
-            "wisdom": 10,
-            "charisma": 10
-        },
-        "stat_modifiers": {
-            "strength": {
-                "race": 1
-            },
-            "dexterity": {
-                "race": 1
-            },
-            "constitution": {
-                "race": 1
-            },
-            "intelligence": {
-                "race": 1
-            },
-            "wisdom": {
-                "race": 1
-            },
-            "charisma": {
-                "race": 1
-            }
-        },
-        "features": [
-            "Otherworldly Patron",
-            "Pact Magic"
-        ],
-        "inventory": [
-            "wooden_sword"
-        ],
-        "spell_slots": [
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        ],
-        "spells": [
-            [
-                "eldritch_blast"
-            ],
-            [
-                "blade_ward"
-            ],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ]
-    },
     "474877882045431808": {
         "name": "Dudur Hardur",
         "age": "99",
@@ -355,12 +277,85 @@
             "Arcane Tradition"
         ],
         "inventory": [
-            "dirt",
             "dirt"
         ],
         "spell_slots": [
             3,
             2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "spells": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
+    },
+    "323028456977727488": {
+        "name": "HHH",
+        "age": "45",
+        "race": "Human",
+        "class": "Paladin",
+        "current_location": "",
+        "current_building": "",
+        "level": 1,
+        "xp": 0,
+        "unspent_points": 10,
+        "gold": 10,
+        "max_hp": 10,
+        "current_hp": 10,
+        "armor_class": 10,
+        "proficiencies": [],
+        "proficiency_bonus": "2",
+        "stats": {
+            "strength": 10,
+            "dexterity": 10,
+            "constitution": 10,
+            "intelligence": 10,
+            "wisdom": 10,
+            "charisma": 10
+        },
+        "stat_modifiers": {
+            "strength": {
+                "race": 1
+            },
+            "dexterity": {
+                "race": 1
+            },
+            "constitution": {
+                "race": 1
+            },
+            "intelligence": {
+                "race": 1
+            },
+            "wisdom": {
+                "race": 1
+            },
+            "charisma": {
+                "race": 1
+            }
+        },
+        "features": [
+            "Divine Sense"
+        ],
+        "inventory": [
+            "wooden_sword",
+            "wooden_club"
+        ],
+        "spell_slots": [
+            0,
+            0,
             0,
             0,
             0,
