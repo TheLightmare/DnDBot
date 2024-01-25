@@ -1,8 +1,7 @@
 {
-  "Wizard":{
+  "Wizard": {
     "name": "Wizard",
     "description": "A scholarly magic-user capable of manipulating the structures of reality",
-
     "levelup_pattern": [
       {
         "proficiency_bonus": "2",
@@ -44,7 +43,6 @@
   "Warlock": {
     "name": "Warlock",
     "description": "A wielder of magic that is derived from a bargain with an extraplanar entity",
-
     "levelup_pattern": [
       {
         "proficiency_bonus": "2",
@@ -83,45 +81,461 @@
       }
     ]
   },
-  "Paladin":{
+  "Paladin": {
     "name": "Paladin",
     "description": "A holy warrior bound to a sacred oath",
-
     "levelup_pattern": [
       {
         "proficiency_bonus": "2",
         "features": [
-            "Divine Sense"
+          "Divine Sense"
         ],
         "spell_slots": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
         ]
       },
       {
         "proficiency_bonus": "2",
         "features": [
-            "Fighting Style",
-            "Spellcasting",
-            "Divine Smite"
+          "Fighting Style",
+          "Spellcasting",
+          "Divine Smite"
         ],
         "spell_slots": [
-            2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "Monk": {
+    "name": "Monk",
+    "description": "A master of martial arts.",
+    "levelup_pattern": [
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Unarmored Defense",
+          "Martial Arts"
+        ],
+        "spell_slots": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Ki",
+          "Unarmored Movement"
+        ],
+        "spell_slots": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "Sorcerer": {
+    "name": "Sorcerer",
+    "description": "A spellcaster who draws on inherent magic from a gift or bloodline",
+    "levelup_pattern": [
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Spellcasting",
+          "Sorcerous Origin"
+        ],
+        "spell_slots": [
+          4,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Font of Magic"
+        ],
+        "spell_slots": [
+          4,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "Ranger": {
+    "name": "Ranger",
+    "description": "A warrior who combats threats on the edges of civilization",
+    "levelup_pattern": [
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Favored Enemy",
+          "Natural Explorer"
+        ],
+        "spell_slots": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Fighting Style",
+          "Spellcasting"
+        ],
+        "spell_slots": [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "Druid": {
+    "name": "Druid",
+    "description": "A priest of the Old Faith, wielding the powers of nature and adopting animal forms",
+    "levelup_pattern": [
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Druidic",
+          "Spellcasting"
+        ],
+        "spell_slots": [
+          2,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Wild Shape"
+        ],
+        "spell_slots": [
+          2,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "Bard": {
+    "name": "Bard",
+    "description": "An inspiring magician whose power echoes the music of creation",
+    "levelup_pattern": [
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Spellcasting",
+          "Bardic Inspiration"
+        ],
+        "spell_slots": [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Jack of All Trades",
+          "Song of Rest"
+        ],
+        "spell_slots": [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "Cleric": {
+    "name": "Cleric",
+    "description": "A priestly champion who wields divine magic in service of a higher power",
+    "levelup_pattern": [
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Spellcasting",
+          "Divine Domain"
+        ],
+        "spell_slots": [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Channel Divinity"
+        ],
+        "spell_slots": [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "Fighter": {
+    "name": "Fighter",
+    "description": "A master of martial combat, skilled with a variety of weapons and armor",
+    "levelup_pattern": [
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Fighting Style",
+          "Second Wind"
+        ],
+        "spell_slots": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Action Surge (1/rest)"
+        ],
+        "spell_slots": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "Rogue": {
+    "name": "Rogue",
+    "description": "A scoundrel who uses stealth and trickery to overcome obstacles and enemies",
+    "levelup_pattern": [
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Expertise",
+          "Sneak Attack",
+          "Thieves' Cant"
+        ],
+        "spell_slots": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Cunning Action"
+        ],
+        "spell_slots": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "Barbarian": {
+    "name": "Barbarian",
+    "description": "A fierce warrior of primitive background who can enter a battle rage",
+    "levelup_pattern": [
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Rage",
+          "Unarmored Defense"
+        ],
+        "spell_slots": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Reckless Attack",
+          "Danger Sense"
+        ],
+        "spell_slots": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "Artificer": {
+    "name": "Artificer",
+    "description": "A master of invention.",
+    "levelup_pattern": [
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Spellcasting",
+          "Tool Expertise",
+          "Infuse Item"
+        ],
+        "spell_slots": [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "proficiency_bonus": "2",
+        "features": [
+          "Infuse Item",
+          "The Right Tool for the Job"
+        ],
+        "spell_slots": [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
         ]
       }
     ]

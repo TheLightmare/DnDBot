@@ -303,10 +303,10 @@
         ]
     },
     "323028456977727488": {
-        "name": "HHH",
-        "age": "45",
-        "race": "Human",
-        "class": "Paladin",
+        "name": "ggg",
+        "age": "8",
+        "race": "Dwarf",
+        "class": "Sorcerer",
         "current_location": "",
         "current_building": "",
         "level": 1,
@@ -328,34 +328,34 @@
         },
         "stat_modifiers": {
             "strength": {
-                "race": 1
+                "race": 2
             },
             "dexterity": {
-                "race": 1
+                "race": 0
             },
             "constitution": {
-                "race": 1
+                "race": 2
             },
             "intelligence": {
-                "race": 1
+                "race": 0
             },
             "wisdom": {
-                "race": 1
+                "race": 0
             },
             "charisma": {
-                "race": 1
+                "race": 0
             }
         },
         "features": [
-            "Divine Sense"
+            "Spellcasting",
+            "Sorcerous Origin"
         ],
         "inventory": [
-            "wooden_sword",
-            "wooden_club"
+            "wooden_sword"
         ],
         "spell_slots": [
-            0,
-            0,
+            4,
+            2,
             0,
             0,
             0,
@@ -365,8 +365,12 @@
             0
         ],
         "spells": [
-            [],
-            [],
+            [
+                null
+            ],
+            [
+                null
+            ],
             [],
             [],
             [],
